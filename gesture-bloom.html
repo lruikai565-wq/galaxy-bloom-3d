@@ -59,7 +59,7 @@
   html,body{
     margin:0; height:100%; overflow:hidden;
     background:
-      radial-gradient(ellipse 90% 70% at 50% 40%, #0d0a26 0%, #050313 55%, #03020a 100%);
+      radial-gradient(ellipse 92% 72% at 50% 42%, #080418 0%, #030310 56%, #010208 100%);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
     color:#fff;
     -webkit-user-select:none; user-select:none;
@@ -98,14 +98,14 @@
   #vignette{
     position:fixed; inset:0; pointer-events:none; z-index:4;
     background:
-      radial-gradient(ellipse 58% 48% at 50% 50%, rgba(120,70,255,.05) 0%, rgba(0,0,0,0) 60%),
-      radial-gradient(ellipse 135% 108% at 50% 50%, rgba(0,0,0,0) 42%, rgba(2,1,8,.7) 100%);
+      radial-gradient(ellipse 60% 50% at 50% 50%, rgba(120,70,255,.055) 0%, rgba(0,0,0,0) 62%),
+      radial-gradient(ellipse 128% 102% at 50% 50%, rgba(0,0,0,0) 36%, rgba(1,1,6,.84) 100%);
   }
 
   /* ================= HUD ================= */
   .hud{ position:fixed; z-index:10; pointer-events:none; }
   .hud--tl{ top:max(16px, env(safe-area-inset-top)); left:20px; }
-  .hud--tr{ top:max(16px, env(safe-area-inset-top)); right:20px; display:flex; flex-direction:column; align-items:flex-end; gap:10px; }
+  .hud--tr{ top:max(74px, calc(env(safe-area-inset-top) + 74px)); right:20px; display:flex; flex-direction:column; align-items:flex-end; gap:10px; }
   .hud--bl{ left:20px; bottom:max(18px, env(safe-area-inset-bottom)); }
   .hud--b { left:50%; transform:translateX(-50%); bottom:max(18px, env(safe-area-inset-bottom)); }
 
@@ -184,7 +184,7 @@
   /* ================= 面板 ================= */
   .fab{
     position:fixed; z-index:20;
-    right:20px; bottom:max(18px, env(safe-area-inset-bottom));
+    right:20px; top:max(16px, env(safe-area-inset-top));
     width:42px; height:42px; border-radius:50%;
     display:grid; place-items:center;
     font-size:16px; color:#fff; cursor:pointer;
@@ -197,15 +197,15 @@
 
   .panel{
     position:fixed; z-index:19;
-    right:20px; bottom:calc(max(18px, env(safe-area-inset-bottom)) + 54px);
+    right:20px; top:calc(max(16px, env(safe-area-inset-top)) + 56px);
     width:276px; padding:15px 16px 13px;
     border-radius:18px; border:1px solid var(--line);
     background:var(--glass);
     backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
     box-shadow:0 20px 60px rgba(0,0,0,.65);
-    transform-origin:bottom right;
+    transform-origin:top right;
     transition:opacity .28s, transform .28s;
-    max-height:78vh; overflow-y:auto;
+    max-height:72vh; overflow-y:auto;
   }
   .panel.hidden{ opacity:0; transform:scale(.9) translateY(10px); pointer-events:none; }
   .panel__head{
@@ -306,13 +306,6 @@
     <div id="diag" class="diag">MP:加载中… · CAM:未开 · 手:0</div>
   </header>
 
-  <aside class="hud hud--tr">
-    <div class="meter">
-      <div class="meter__label"><span>绽放度</span><span id="bloom-val">0%</span></div>
-      <div class="meter__track"><div class="meter__fill" id="bloom-bar"></div></div>
-    </div>
-  </aside>
-
   <div class="hud hud--bl"><span id="stats">— fps</span></div>
   <footer class="hud hud--b" style="display:none"><p id="hint">握拳 → 坍缩成星核 &nbsp;·&nbsp; 张开手掌 → 银河绽放</p></footer>
 
@@ -325,9 +318,45 @@
     </div>
 
     <label class="row">
-      <span>粒子数量</span>
-      <input id="s-count" type="range" min="30000" max="420000" step="10000" value="420000" />
-      <b id="v-count">300k</b>
+      <span>粒子密度</span>
+      <input id="s-count" type="range" min="40000" max="300000" step="5000" value="150000" />
+      <b id="v-count">120k</b>
+    </label>
+
+    <label class="row">
+      <span>旋臂数</span>
+      <input id="s-arms" type="range" min="2" max="7" step="1" value="5" />
+      <b id="v-arms">5</b>
+    </label>
+
+    <label class="row">
+      <span>色调</span>
+      <input id="s-hue" type="range" min="-180" max="180" step="1" value="0" />
+      <b id="v-hue">0°</b>
+    </label>
+
+    <label class="row">
+      <span>辉光强度</span>
+      <input id="s-bloomstr" type="range" min="0" max="2.2" step="0.05" value="1.4" />
+      <b id="v-bloomstr">1.40</b>
+    </label>
+
+    <label class="row">
+      <span>扩散半径</span>
+      <input id="s-fanr" type="range" min="0.6" max="2.6" step="0.05" value="1.55" />
+      <b id="v-fanr">1.55</b>
+    </label>
+
+    <label class="row">
+      <span>扇形角度</span>
+      <input id="s-fana" type="range" min="10" max="80" step="1" value="40" />
+      <b id="v-fana">40°</b>
+    </label>
+
+    <label class="row">
+      <span>扩散层数</span>
+      <input id="s-fanl" type="range" min="1" max="3" step="1" value="3" />
+      <b id="v-fanl">3</b>
     </label>
 
     <label class="row">
@@ -340,6 +369,12 @@
       <span>手势灵敏度</span>
       <input id="s-sens" type="range" min="0.5" max="2" step="0.05" value="1" />
       <b id="v-sens">1.00</b>
+    </label>
+
+    <label class="row">
+      <span>翻转幅度</span>
+      <input id="s-flip" type="range" min="20" max="180" step="5" value="90" />
+      <b id="v-flip">90°</b>
     </label>
 
     <label class="row">
@@ -381,7 +416,12 @@
       <input id="s-mirror" type="checkbox" />
     </label>
 
-    <p class="panel__tip">默认后置摄像头，全屏显示。摄像头失败会自动逐级降级尝试。若银河边缘漂移，可微调「畸变校正」。无摄像头时：移动鼠标控制位置，按住左键绽放。</p>
+    <label class="row row--switch">
+      <span>握拳黑洞</span>
+      <input id="s-bh" type="checkbox" checked />
+    </label>
+
+    <p class="panel__tip">默认后置摄像头。摄像头失败会自动逐级降级尝试。银河边缘漂移可微调「畸变校正」。无摄像头时：移动鼠标控制位置，拖拽旋转，滚轮缩放，点击激起冲击波。</p>
   </div>
 
   <div id="loading">GENERATING PARTICLES…</div>
@@ -439,8 +479,15 @@ function gauss() {
 
 const IS_TOUCH = matchMedia('(pointer: coarse)').matches;
 const MOBILE = IS_TOUCH && Math.min(innerWidth, innerHeight) < 820;
-const DEFAULT_COUNT = MOBILE ? 120000 : 360000;   // 移动端 120k 保帧率 / 桌面 360k
-const DPR = Math.min(devicePixelRatio || 1, MOBILE ? 2 : 2.5);   // 移动端 2× 保帧率 / 桌面 2.5× 更锐利
+const TIER_HI = (navigator.hardwareConcurrency || 4) >= 8;   // 高端设备识别
+const DEFAULT_COUNT = MOBILE ? (TIER_HI ? 150000 : 110000) : 250000;   // 15–25 万   // 移动端 120k 保帧率 / 桌面 360k
+let DPR = Math.min(devicePixelRatio || 1, MOBILE ? 2 : 2.5);   // 移动端 2× 保帧率 / 桌面 2.5× 更锐利
+/* 像素预算：超大视口（如横屏 / 桌面模式）自动降采样 —— 星系是填充率密集型，像素数才是关键 */
+const MAX_PIXELS = MOBILE ? 1.7e6 : 2.8e6;
+(function capPixels() {
+  const px = innerWidth * DPR * innerHeight * DPR;
+  if (px > MAX_PIXELS) DPR = Math.max(1, DPR * Math.sqrt(MAX_PIXELS / px));
+})();
 
 /* mix-blend-mode:screen 是否可用（不可用时隐藏视频，仍可运行） */
 const SUPPORTS_SCREEN = !!(window.CSS && CSS.supports && CSS.supports('mix-blend-mode', 'screen'));
@@ -450,26 +497,62 @@ const SUPPORTS_SCREEN = !!(window.CSS && CSS.supports && CSS.supports('mix-blend
    ---------------------------------------------------------
    种群：核球 / 旋臂（含恒星团+盘面翘曲） / 盘面尘埃 / 外围晕
    ========================================================= */
-const GALAXY_R = 4.0;    // 银河规模扩大
-const NARMS = 5;
+
+const GALAXY_R = 4.0;    // 银河规模
+let NARMS = 5;           // 旋臂数（面板可调 2–7）
 const TWIST = 3.6;
-const CORE_R = 0.40;
+const CORE_R = 0.55;   // 核球半径加大
 
 /* 对数螺旋（真实星系旋臂形态）：theta = arm*2π/N + k*ln(r/r0) */
-const ARM_R0 = 0.20;     // 旋臂起始（归一化半径）
-const ARM_PITCH = 2.6;   // 缠绕系数，越大越紧
+const ARM_R0 = 0.20;
+const ARM_PITCH = 2.6;
 function armAngle(arm, rn) {
   return arm * (TAU / NARMS) + ARM_PITCH * Math.log(Math.max(0.08, rn) / ARM_R0);
 }
 
-/* 暖金核球 → 金黄 → 粉 → 紫 → 蓝紫旋臂（年轻星族偏蓝） */
+/* 核暖白 → 金黄 → 橙红 → 玫红 → 品红紫 → 紫 → 深蓝 → 青（哈勃/韦伯色调） */
 const COLOR_STOPS = [
-  [0.00, 1.00, 0.93, 0.72],
-  [0.16, 1.00, 0.78, 0.50],
-  [0.38, 1.00, 0.62, 0.72],
-  [0.66, 0.72, 0.52, 1.00],
-  [1.00, 0.40, 0.58, 1.00],
+  [0.00, 1.000, 0.945, 0.788],   // #fff1c9 暖白（银核）
+  [0.14, 1.000, 0.882, 0.686],   // #ffe1af 暖黄
+  [0.34, 1.000, 0.918, 0.812],   // 黄白
+  [0.52, 0.902, 0.902, 1.000],   // 白
+  [0.70, 0.722, 0.800, 1.000],   // #b8ccff 蓝白（旋臂主体）
+  [0.86, 0.560, 0.706, 1.000],   // #8fb4ff 蓝
+  [1.00, 0.420, 0.820, 1.000],   // #6bd1ff 深青蓝
 ];
+
+/* 恒星色温色板（蓝白 / 白 / 黄 / 橙红）—— 星点按色温着色 */
+const TEMPS = [
+  { c: [0.74, 0.83, 1.00], w: 0.08 },
+  { c: [1.00, 1.00, 1.00], w: 0.14 },
+  { c: [1.00, 0.91, 0.72], w: 0.42 },
+  { c: [1.00, 0.72, 0.47], w: 0.26 },
+  { c: [1.00, 0.54, 0.38], w: 0.10 },
+];
+function pickTemp(rgb) {
+  let r = Math.random(), acc = 0;
+  for (const s of TEMPS) { acc += s.w; if (r <= acc) { rgb[0] = s.c[0]; rgb[1] = s.c[1]; rgb[2] = s.c[2]; return; } }
+  rgb[0] = 1; rgb[1] = 1; rgb[2] = 1;
+}
+
+/* 2D 值噪声 + FBM（暗尘带 / 旋臂断裂 / 扇形扭曲用） */
+function vnoise2(x, y, seed) {
+  const xi = Math.floor(x), yi = Math.floor(y);
+  const xf = x - xi, yf = y - yi;
+  const u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+  const h = (a, b) => {
+    let n = (a * 374761393 + b * 668265263 + seed * 1442695041) | 0;
+    n = (n ^ (n >> 13)) * 1274126177 | 0;
+    return ((n ^ (n >> 16)) >>> 0) / 4294967295;
+  };
+  const a = h(xi, yi), b = h(xi + 1, yi), c = h(xi, yi + 1), d = h(xi + 1, yi + 1);
+  return (a * (1 - u) + b * u) * (1 - v) + (c * (1 - u) + d * u) * v;
+}
+function fbm2(x, y, seed, oct) {
+  let s = 0, amp = 0.5, f = 1, norm = 0;
+  for (let o = 0; o < oct; o++) { s += amp * vnoise2(x * f, y * f, seed + o * 17); norm += amp; amp *= 0.5; f *= 2.1; }
+  return s / norm;
+}
 
 function rampColor(t, out) {
   t = clamp(t);
@@ -497,62 +580,108 @@ function corePos(out, i3) {
   out[i3 + 2] = cr * ct * 0.60;
 }
 
-/* 旋臂脊线上的恒星团（亮结） */
-const CLUSTERS = [];
-(function buildClusters() {
+/* 色彩饱和度提升（+18%）：层次分明且过渡平滑 */
+function saturate(rgb, s) {
+  const l = 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2];
+  rgb[0] = Math.max(0, l + (rgb[0] - l) * s);
+  rgb[1] = Math.max(0, l + (rgb[1] - l) * s);
+  rgb[2] = Math.max(0, l + (rgb[2] - l) * s);
+}
+
+/* HII 粉红发射星云区（20–30 处，大小不一） */
+let HII_REGIONS = [];
+function buildHII() {
+  HII_REGIONS = [];
+  const n = 22 + ((Math.random() * 9) | 0);          // 22–30 处
+  for (let i = 0; i < n; i++) {
+    const arm = (Math.random() * NARMS) | 0;
+    const rn = 0.20 + 0.74 * Math.pow(Math.random(), 0.9);
+    HII_REGIONS.push({
+      rn,
+      theta: armAngle(arm, rn) + gauss() * 0.15,
+      r: 0.028 + 0.075 * Math.random(),              // 尺寸不一
+    });
+  }
+}
+
+/* 旋臂脊线上的恒星团（亮结）—— 随旋臂数重建 */
+let CLUSTERS = [];
+function buildClusters() {
+  CLUSTERS = [];
   for (let a = 0; a < NARMS; a++) {
-    for (let k = 0; k < 12; k++) {
-      const rn = ARM_R0 + (1 - ARM_R0) * (k + 0.5 + Math.random() * 0.5) / 12;
-      CLUSTERS.push({
-        rn,
-        theta: armAngle(a, rn) + (Math.random() - 0.5) * 0.12,
-      });
+    for (let k = 0; k < 14; k++) {
+      const rn = ARM_R0 + (1 - ARM_R0) * (k + 0.5 + Math.random() * 0.5) / 14;
+      CLUSTERS.push({ rn, theta: armAngle(a, rn) + (Math.random() - 0.5) * 0.12 });
     }
+  }
+  buildHII();
+}
+buildClusters();
+
+/* 旋臂不对称：每条臂独立的相位 / 宽度 / 亮度抖动（禁止完美对称螺旋） */
+const ARM_JIT = [];
+(function () {
+  for (let a = 0; a < 8; a++) {
+    ARM_JIT.push({ ph: (Math.random() - 0.5) * 0.55, w: 0.72 + Math.random() * 0.6, br: 0.72 + Math.random() * 0.55 });
   }
 })();
 
-function createGalaxyGeometry(count) {
-  const N = count;
+/* ---- 4 层粒子：尺寸分布 + 独立材质参数 ----
+   星尘 70%（1–2px 雾状底色）/ 中等 22%（2–4px 旋臂轮廓）
+   亮星 7%（5–10px 柔和光晕）/ 巨星 1%（12–24px 十字衍射光芒） */
+const LAYERS = [
+  { key: 'dust',   frac: 0.750, sMin: 1.0,  sMax: 2.0,  glow: 0.58, spread: 1.00, giant: false },
+  { key: 'mid',    frac: 0.180, sMin: 2.0,  sMax: 4.0,  glow: 1.00, spread: 0.86, giant: false },
+  { key: 'bright', frac: 0.055, sMin: 5.0,  sMax: 10.0, glow: 1.45, spread: 0.70, giant: false },
+  { key: 'giant',  frac: 0.015, sMin: 12.0, sMax: 24.0, glow: 1.75, spread: 0.58, giant: true  },
+];
+
+/* 单层几何：核球 / 中心棒 / 旋臂 / 银晕 采样，尺寸落在该层区间 */
+function buildLayerGeometry(layer, count) {
+  const N = Math.max(1, count | 0);
   const pos  = new Float32Array(N * 3);
   const open = new Float32Array(N * 3);
   const col  = new Float32Array(N * 3);
   const rnd  = new Float32Array(N);
   const siz  = new Float32Array(N);
   const dly  = new Float32Array(N);
+  const disk = new Float32Array(N);
 
   const rgb = [0, 0, 0];
   let i = 0;
 
   const nBulge = Math.round(N * 0.13);
   const nBar   = Math.round(N * 0.06);
-  const nDust  = Math.round(N * 0.20);
-  const nHalo  = Math.round(N * 0.15);
-  const nArms  = N - nBulge - nBar - nDust - nHalo;
+  const nHalo  = Math.round(N * 0.20);
+  const nArms  = N - nBulge - nBar - nHalo;
 
-  /* ---------- 核球 ---------- */
+  const sOf = () => layer.sMin + (layer.sMax - layer.sMin) * Math.pow(Math.random(), 0.7);
+
+  /* ---------- 核球（中心极亮且密集，核心更厚） ---------- */
   for (let k = 0; k < nBulge; k++, i++) {
-    const rr = 0.46 * GALAXY_R * Math.pow(Math.random(), 1.9);
+    const rr = 0.62 * GALAXY_R * Math.pow(Math.random(), 1.75);
     const ct = Math.random() * 2 - 1;
     const st = Math.sqrt(Math.max(0, 1 - ct * ct));
     const ph = Math.random() * TAU;
     open[i * 3]     = rr * st * Math.cos(ph);
     open[i * 3 + 1] = rr * st * Math.sin(ph);
-    open[i * 3 + 2] = rr * ct * 0.42;
+    open[i * 3 + 2] = rr * ct * 0.54;
 
     corePos(pos, i * 3);
 
-    rampColor(0.02 + 0.24 * Math.random(), rgb);
-    col[i * 3] = rgb[0]; col[i * 3 + 1] = rgb[1]; col[i * 3 + 2] = rgb[2];
+    rampColor(0.02 + 0.20 * Math.random(), rgb);
+    saturate(rgb, 1.16);
+    const j = 1.05 + 0.35 * Math.random();
+    col[i * 3] = rgb[0] * j; col[i * 3 + 1] = rgb[1] * j; col[i * 3 + 2] = rgb[2] * j;
 
     rnd[i] = Math.random();
-    siz[i] = 0.55 + Math.random() * 0.75;
+    siz[i] = sOf() * (0.85 + 0.4 * Math.random());
     dly[i] = Math.random() * 0.30;
+    disk[i] = 0.25;
   }
 
-  /* ---------- 中心棒（银河系是棒旋星系） ---------- */
-  const BAR_A = 0.62 * GALAXY_R;
-  const BAR_B = 0.16 * GALAXY_R;
-  const BAR_C = 0.055 * GALAXY_R;
+  /* ---------- 中心棒（棒旋星系） ---------- */
+  const BAR_A = 0.72 * GALAXY_R, BAR_B = 0.19 * GALAXY_R, BAR_C = 0.070 * GALAXY_R;
   for (let k = 0; k < nBar; k++, i++) {
     const t = Math.pow(Math.random(), 0.7);
     const sgn = Math.random() < 0.5 ? -1 : 1;
@@ -561,45 +690,49 @@ function createGalaxyGeometry(count) {
     open[i * 3 + 2] = gauss() * BAR_C * (1 - 0.30 * t);
 
     corePos(pos, i * 3);
-
-    rampColor(0.04 + 0.16 * Math.random(), rgb);
-    const d = 0.65 + Math.random() * 0.45;
+    rampColor(0.04 + 0.14 * Math.random(), rgb);
+    saturate(rgb, 1.16);
+    const d = 0.72 + Math.random() * 0.45;
     col[i * 3] = rgb[0] * d; col[i * 3 + 1] = rgb[1] * d; col[i * 3 + 2] = rgb[2] * d;
 
     rnd[i] = Math.random();
-    siz[i] = 0.45 + Math.random() * 0.55;
+    siz[i] = sOf() * (0.7 + 0.35 * Math.random());
     dly[i] = Math.random() * 0.25;
+    disk[i] = 0.55;
   }
 
-  /* ---------- 旋臂（年轻蓝巨星 + HII 区，密度波峰） ---------- */
+  /* ---------- 旋臂：高斯散布 + 羽状分叉 + 蓝白年轻星 / 橙红红巨星 / 粉红 HII ---------- */
   for (let k = 0; k < nArms; k++, i++) {
     const rn = ARM_R0 + (1 - ARM_R0) * Math.pow(Math.random(), 0.62);
     const r  = rn * GALAXY_R;
 
     const arm  = (Math.random() * NARMS) | 0;
-    const base = armAngle(arm, rn);
+    const jit  = ARM_JIT[arm % ARM_JIT.length];
+    const base = armAngle(arm, rn) + jit.ph;
 
-    /* 60% 紧贴脊线的亮星族，其余为较宽的臂体（比例↑、臂宽↓ → 旋臂更锐利） */
-    const tight = Math.random() < 0.60;
-    const armW  = tight ? (0.040 + 0.028 * rn) : (0.16 + 0.14 * rn);
+    const tight = Math.random() < 0.58;
+    const armW  = (tight ? (0.038 + 0.026 * rn) : (0.15 + 0.14 * rn)) * layer.spread * jit.w;
 
     let theta = base + gauss() * armW;
     let rj    = Math.max(0.06, r + gauss() * (tight ? 0.022 : 0.055) * GALAXY_R);
 
-    /* 羽状分支（spur）：从主臂甩出的小分支 */
-    if (!tight && Math.random() < 0.09) {
+    /* 羽状分支（spur） */
+    if (!tight && Math.random() < 0.10) {
       const s = Math.pow(Math.random(), 1.6);
       rj += s * 0.16 * GALAXY_R;
       theta += 0.60 * s / (0.35 + rn);
     }
 
-    /* 盘面翘曲（外围沿方位角轻微起伏，3D 感） */
+    /* 噪声扭曲：旋臂被扭出自然的不规则感 */
+    theta += (fbm2(rn * 2.4, arm * 3.7 + 0.5, 17, 3) - 0.5) * 0.42 * (0.35 + rn);
+
+    /* 盘面翘曲 */
     const warp = 0.075 * GALAXY_R * Math.sin(theta - rn * 2.6) * smoothstep(0.45, 1, rn);
 
     open[i * 3]     = Math.cos(theta) * rj;
     open[i * 3 + 1] = Math.sin(theta) * rj;
-    open[i * 3 + 2] = gauss() * (tight ? 0.030 : 0.055) * GALAXY_R * Math.exp(-rn * 1.1)
-                    + gauss() * 0.012 * GALAXY_R + warp;
+    open[i * 3 + 2] = gauss() * (tight ? 0.036 : 0.066) * GALAXY_R * Math.exp(-rn * 1.1)
+                    + gauss() * 0.016 * GALAXY_R + warp;
 
     corePos(pos, i * 3);
 
@@ -610,74 +743,56 @@ function createGalaxyGeometry(count) {
       const dA = angDiff(theta, cl.theta) / 0.13;
       const dR = (rn - cl.rn) / 0.15;
       const d2 = dA * dA + dR * dR;
-      if (d2 < 1) {
-        const b = 1 + 3.0 * (1 - d2) * (1 - d2);
-        if (b > boost) boost = b;
-      }
+      if (d2 < 1) { const b = 1 + 3.0 * (1 - d2) * (1 - d2); if (b > boost) boost = b; }
+    }
+
+    /* HII 星云区（沿旋臂的粉红斑块，20–30 处、大小不一） */
+    let hii = 0;
+    for (let h = 0; h < HII_REGIONS.length; h++) {
+      const hr = HII_REGIONS[h];
+      const dA = angDiff(theta, hr.theta) / hr.r;
+      const dR = (rn - hr.rn) / (hr.r * 1.7);
+      const d2 = dA * dA + dR * dR;
+      if (d2 < 1) { const v = 1 - d2; if (v > hii) hii = v; }
     }
 
     const roll = Math.random();
-    const pHot = tight ? 0.10 : 0.020;
-    const pHii = pHot + (tight ? 0.055 : 0.030);
-    if (roll < pHot) {                        /* 亮蓝巨星（年轻恒星） */
-      rgb[0] = 0.66; rgb[1] = 0.86; rgb[2] = 1.00;
-    } else if (roll < pHii) {                 /* 粉红电离氢区 HII */
-      rgb[0] = 1.00; rgb[1] = 0.36; rgb[2] = 0.68;
+    const pHot = tight ? 0.13 : 0.030;                       // 蓝白年轻亮星（数量翻倍）
+    const pRed = pHot + (tight ? 0.055 : 0.022);             // 橙红老年红巨星
+    if (roll < pHot) {
+      rgb[0] = 0.70; rgb[1] = 0.88; rgb[2] = 1.00;
+    } else if (roll < pRed) {
+      rgb[0] = 1.00; rgb[1] = 0.45; rgb[2] = 0.22;
     } else {
-      rampColor(0.14 + 0.86 * rn, rgb);
-      const blue = 0.30 * rn;                 /* 旋臂整体偏蓝（年轻星族） */
-      rgb[0] *= (1 - blue * 0.35);
-      rgb[1] *= (1 - blue * 0.10);
-      rgb[2] = Math.min(1, rgb[2] * (1 + blue * 0.30));
-      const j = ((tight ? 1.14 : 0.84) + Math.random() * 0.20) * Math.min(boost, 1.7);
+      rampColor(0.10 + 0.90 * rn, rgb);
+      /* 按恒星色温着色（蓝白/白/黄/橙红），与旋臂底色混合 */
+      const tmp = [0, 0, 0];
+      pickTemp(tmp);
+      rgb[0] = rgb[0] * 0.42 + tmp[0] * 0.58;
+      rgb[1] = rgb[1] * 0.42 + tmp[1] * 0.58;
+      rgb[2] = rgb[2] * 0.42 + tmp[2] * 0.58;
+      /* 沿旋臂的噪声断裂（断续感） */
+      const brk = smoothstep(0.30, 0.56, fbm2(theta * 1.7, rn * 4.2, 31, 3)) * 0.80 + 0.20;
+      const j = ((tight ? 1.14 : 0.84) + Math.random() * 0.20) * Math.min(boost, 1.7) * brk * jit.br;
       rgb[0] *= j; rgb[1] *= j; rgb[2] *= j;
     }
+    /* 落入 HII 区 → 染成粉红并增亮 */
+    if (hii > 0) {
+      const k = hii * 0.85;
+      rgb[0] += (1.05 - rgb[0]) * k;
+      rgb[1] += (0.34 - rgb[1]) * k;
+      rgb[2] += (0.66 - rgb[2]) * k;
+    }
+    saturate(rgb, 1.18);
     col[i * 3] = rgb[0]; col[i * 3 + 1] = rgb[1]; col[i * 3 + 2] = rgb[2];
 
     rnd[i] = Math.random();
-    siz[i] = roll < pHot
-      ? (2.0 + Math.random() * 2.4)
-      : (roll < pHii ? (1.1 + Math.random() * 0.9)
-                     : (0.55 + Math.random() * 0.85) * Math.min(boost, 1.8));
+    siz[i] = sOf() * (roll < pHot ? 1.6 : roll < pRed ? 1.3 : Math.min(boost, 1.7)) * (1 + hii * 0.9);
     dly[i] = clamp(rn * 0.72 + Math.random() * 0.28);
+    disk[i] = 1.0;
   }
 
-  /* ---------- 盘面尘埃 ---------- */
-  for (let k = 0; k < nDust; k++, i++) {
-    const rn = Math.pow(Math.random(), 0.5);
-    const r  = (0.06 + 0.94 * rn) * GALAXY_R;
-    const th = Math.random() * TAU;
-    const rj = r + gauss() * 0.09 * GALAXY_R;
-
-    open[i * 3]     = Math.cos(th) * rj;
-    open[i * 3 + 1] = Math.sin(th) * rj;
-    open[i * 3 + 2] = gauss() * 0.042 * GALAXY_R * Math.exp(-rn * 1.4);
-
-    corePos(pos, i * 3);
-
-    /* 尘埃带：到最近旋臂内缘的角距，带内压暗 → 形成暗纹 */
-    let dArm = Math.PI;
-    for (let a = 0; a < NARMS; a++) {
-      const d = Math.abs(angDiff(th, armAngle(a, rn) + 0.32));
-      if (d < dArm) dArm = d;
-    }
-    let lane = 1;
-    if (dArm > 0.30) lane *= 0.48;
-    if (dArm > 0.45 && dArm < 0.78) lane *= 0.26;   /* 尘埃带最暗 */
-    if (dArm > 1.00) lane *= 0.68;
-
-    rampColor(0.20 + 0.80 * rn, rgb);
-    const j = (0.42 + Math.random() * 0.30) * lane;
-    col[i * 3]     = rgb[0] * j + 0.05 * lane;
-    col[i * 3 + 1] = rgb[1] * j + 0.08 * lane;
-    col[i * 3 + 2] = rgb[2] * j + 0.16 * lane;
-
-    rnd[i] = Math.random();
-    siz[i] = 0.30 + Math.random() * 0.45;
-    dly[i] = 0.08 + Math.random() * 0.45;
-  }
-
-  /* ---------- 外围晕 ---------- */
+  /* ---------- 外围银晕 ---------- */
   for (let k = 0; k < nHalo; k++, i++) {
     const rr = GALAXY_R * (0.30 + 1.05 * Math.pow(Math.random(), 0.6));
     const ct = Math.random() * 2 - 1;
@@ -689,14 +804,15 @@ function createGalaxyGeometry(count) {
     open[i * 3 + 2] = rr * ct * 0.85;
 
     corePos(pos, i * 3);
-
-    rampColor(0.10 + 0.30 * Math.random(), rgb);   /* 晕族：偏红黄的老年恒星 */
-    const dim = 0.22 + Math.random() * 0.28;
+    rampColor(0.08 + 0.26 * Math.random(), rgb);
+    saturate(rgb, 1.12);
+    const dim = 0.24 + Math.random() * 0.30;
     col[i * 3] = rgb[0] * dim; col[i * 3 + 1] = rgb[1] * dim; col[i * 3 + 2] = rgb[2] * dim;
 
     rnd[i] = Math.random();
-    siz[i] = 0.40 + Math.random() * 0.55;
+    siz[i] = sOf() * (0.6 + 0.5 * Math.random());
     dly[i] = 0.62 + Math.random() * 0.38;
+    disk[i] = 0.15;
   }
 
   const geo = new THREE.BufferGeometry();
@@ -706,6 +822,136 @@ function createGalaxyGeometry(count) {
   geo.setAttribute('aRand',    new THREE.BufferAttribute(rnd, 1));
   geo.setAttribute('aSize',    new THREE.BufferAttribute(siz, 1));
   geo.setAttribute('aDelay',   new THREE.BufferAttribute(dly, 1));
+  geo.setAttribute('aDisk',    new THREE.BufferAttribute(disk, 1));
+  geo.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), GALAXY_R * 3);
+  return geo;
+}
+
+/* ---- 外围扇形扩散层：从旋臂末端沿切线方向呈扇面抛射 ----
+   致密层（星点连续）→ 稀疏层（星点零落）→ 尘雾层（淡淡辉光）
+   色彩由紫蓝渐变到深青，最外缘融入背景；每层有独立噪声扭曲 */
+const FAN_CFG = { radius: 1.55, angle: 40, layers: 3 };
+
+function buildFanGeometry(count, cfg) {
+  const N = Math.max(1, count | 0);
+  const pos  = new Float32Array(N * 3);
+  const open = new Float32Array(N * 3);
+  const col  = new Float32Array(N * 3);
+  const rnd  = new Float32Array(N);
+  const siz  = new Float32Array(N);
+  const dly  = new Float32Array(N);
+  const disk = new Float32Array(N);
+  const fanS = new Float32Array(N);
+
+  const fanLen = GALAXY_R * Math.max(0.4, cfg.radius);
+  const fanAng = (Math.max(5, Math.min(90, cfg.angle)) * Math.PI) / 180;
+  const nL = Math.max(1, Math.min(3, cfg.layers | 0));
+  const per = Math.ceil(N / nL);
+  const rgb = [0, 0, 0];
+  let i = 0;
+
+  for (let L = 0; L < nL; L++) {
+    const lo = L / nL, hi = (L + 1) / nL;
+    const cnt = (L === nL - 1) ? (N - i) : per;
+    for (let k = 0; k < cnt && i < N; k++, i++) {
+      const arm = (Math.random() * NARMS) | 0;
+      const rE  = GALAXY_R * (0.90 + 0.06 * Math.random());
+      const thE = armAngle(arm, 0.90) + (Math.random() - 0.5) * 0.20;
+      const sgn = (arm % 2 === 0) ? 1 : -1;                 // 交替方向 → 不对称
+      const s   = lo + (hi - lo) * Math.pow(Math.random(), 1.35);
+      const spreadA = (Math.random() * 2 - 1) * fanAng * (0.22 + 0.78 * s);
+      const dir = thE + Math.PI * 0.5 * sgn + spreadA;
+      const dist = s * fanLen * (0.9 + 0.25 * Math.random());
+
+      /* 每层独立噪声扭曲，避免规整 */
+      const nz = fbm2(Math.cos(dir) * 1.6 + L * 3.1, Math.sin(dir) * 1.6, 41 + L * 7, 3) - 0.5;
+      const dirW = dir + nz * 0.55;
+
+      open[i * 3]     = Math.cos(thE) * rE + Math.cos(dirW) * dist;
+      open[i * 3 + 1] = Math.sin(thE) * rE + Math.sin(dirW) * dist;
+      open[i * 3 + 2] = gauss() * 0.10 * GALAXY_R * (1 + s * 1.6);
+
+      corePos(pos, i * 3);
+
+      /* 紫蓝 → 深青 */
+      rgb[0] = 0.62 - 0.32 * s;
+      rgb[1] = 0.52 + 0.33 * s;
+      rgb[2] = 1.00 - 0.15 * s;
+      const dens = (L === 0) ? 0.90 : (L === 1 ? 0.52 : 0.26);   // 致密 → 稀疏 → 尘雾
+      const d = dens * (1 - 0.45 * s) * (0.65 + 0.6 * Math.random());
+      col[i * 3] = rgb[0] * d; col[i * 3 + 1] = rgb[1] * d; col[i * 3 + 2] = rgb[2] * d;
+
+      rnd[i] = Math.random();
+      siz[i] = (L === 2 ? 3.2 : 1.1) + Math.random() * (L === 2 ? 4.6 : 2.2);
+      dly[i] = 0.25 + 0.55 * Math.random();
+      disk[i] = 0.40;
+      fanS[i] = 0.12 + 0.88 * s;
+    }
+  }
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute('aOpen',    new THREE.BufferAttribute(open, 3));
+  geo.setAttribute('aColor',   new THREE.BufferAttribute(col, 3));
+  geo.setAttribute('aRand',    new THREE.BufferAttribute(rnd, 1));
+  geo.setAttribute('aSize',    new THREE.BufferAttribute(siz, 1));
+  geo.setAttribute('aDelay',   new THREE.BufferAttribute(dly, 1));
+  geo.setAttribute('aDisk',    new THREE.BufferAttribute(disk, 1));
+  geo.setAttribute('aFanS',    new THREE.BufferAttribute(fanS, 1));
+  geo.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), GALAXY_R * 6);
+  return geo;
+}
+
+/* 尘埃带：沿旋臂内缘分布，用 normal 混合压暗 → 明暗交错的真实纹理 */
+function buildDustGeometry(count) {
+  const N = Math.max(1, count | 0);
+  const pos  = new Float32Array(N * 3);
+  const open = new Float32Array(N * 3);
+  const col  = new Float32Array(N * 3);
+  const rnd  = new Float32Array(N);
+  const siz  = new Float32Array(N);
+  const dly  = new Float32Array(N);
+  const disk = new Float32Array(N);
+
+  for (let i = 0; i < N; i++) {
+    const rn = Math.pow(Math.random(), 0.5);
+    const arm = (Math.random() * NARMS) | 0;
+    /* 一半沿旋臂内缘，一半横切盘面 → 形成裂隙与切割纹理 */
+    const cross = Math.random() < 0.18;
+    const th  = cross
+      ? Math.random() * TAU
+      : armAngle(arm, rn) + 0.32 + gauss() * (0.06 + 0.08 * rn);
+    const rj  = (0.10 + 0.90 * rn) * GALAXY_R + gauss() * 0.07 * GALAXY_R;
+
+    open[i * 3]     = Math.cos(th) * rj;
+    open[i * 3 + 1] = Math.sin(th) * rj;
+    open[i * 3 + 2] = gauss() * 0.028 * GALAXY_R * Math.exp(-rn * 1.2);
+
+    corePos(pos, i * 3);
+
+    /* FBM 强对比暗尘带：只有噪声高值区才形成浓密暗带 */
+    const n1 = fbm2(th * 2.4, rn * 3.2, 11, 4);
+    const n2 = fbm2(th * 0.9 + 5.0, rn * 1.4, 23, 3);
+    const mask = n1 * 0.65 + n2 * 0.35;
+    const dark = smoothstep(0.40, 0.72, mask);
+
+    const a = (0.22 + 0.55 * dark);
+    col[i * 3] = 0.030 * a; col[i * 3 + 1] = 0.020 * a; col[i * 3 + 2] = 0.018 * a;
+
+    rnd[i] = Math.random();
+    siz[i] = (4.5 + Math.random() * 5.0) * (0.75 + dark * 0.9);
+    dly[i] = 0.05 + Math.random() * 0.5;
+    disk[i] = 1.0;
+  }
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute('aOpen',    new THREE.BufferAttribute(open, 3));
+  geo.setAttribute('aColor',   new THREE.BufferAttribute(col, 3));
+  geo.setAttribute('aRand',    new THREE.BufferAttribute(rnd, 1));
+  geo.setAttribute('aSize',    new THREE.BufferAttribute(siz, 1));
+  geo.setAttribute('aDelay',   new THREE.BufferAttribute(dly, 1));
+  geo.setAttribute('aDisk',    new THREE.BufferAttribute(disk, 1));
   geo.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), GALAXY_R * 3);
   return geo;
 }
@@ -714,36 +960,25 @@ function createGalaxyGeometry(count) {
    2. GLSL
    ========================================================= */
 const VERT = /* glsl */`
-uniform float uTime;
-uniform float uBloom;
-uniform float uSize;
-uniform float uPixelRatio;
-uniform float uOpacity;
-uniform float uSpin;
-uniform vec3  uFocus;
-uniform float uFocusStrength;
-uniform float uFocusRadius;
-uniform vec3  uHand;
-uniform vec3  uHandVel;
-uniform float uHandStr;
-uniform float uHandRadius;
-uniform vec3  uHand2;
-uniform vec3  uHand2Vel;
-uniform float uHand2Str;
-uniform float uHand2Radius;
-uniform vec2  uRipples;
-uniform float uRippleAmp;
+uniform float uTime, uBloom, uSize, uPixelRatio, uOpacity, uSpin, uDiff, uGalR, uArms, uBH;
+uniform float uFocusStrength, uFocusRadius, uShockT, uShockStr, uGlowMul, uSizeMul;
+uniform vec3  uFocus, uHand, uHandVel, uHand2, uHand2Vel, uShock;
+uniform float uHandStr, uHandRadius, uHand2Str, uHand2Radius;
+uniform mat3  uHue;
 
 attribute vec3  aOpen;
 attribute vec3  aColor;
 attribute float aRand;
 attribute float aSize;
 attribute float aDelay;
+attribute float aDisk;
+attribute float aFanS;
 
 varying vec3  vColor;
 varying float vGlow;
+varying float vSoft;   /* 景深：近处星点大而虚 */
 
-/* 手的扰动（软化版）：径向喷散 + 拖拽 + 涡旋 + 涟漪，平方衰减 → 过渡柔和 */
+/* 手的扰动（软化版）：径向喷散 + 拖拽 + 涡旋 + 涟漪，平方衰减 */
 vec3 handDisturb(vec3 p, vec3 hPos, vec3 hVel, float hStr, float hRadius, float seed) {
   vec3  toH  = p - hPos;
   float dH   = length(toH);
@@ -765,27 +1000,30 @@ void main() {
   vec3 core = position;
   vec3 gal  = aOpen;
   float rad = length(gal.xy);
+  float rn  = rad / uGalR;
 
-  float ang = uTime * uSpin + 0.30 * sin(uTime * 0.28 + rad * 0.85);
-  float ca = cos(ang), sa = sin(ang);
-  vec3 g = vec3(gal.x * ca - gal.y * sa,
-                gal.x * sa + gal.y * ca,
-                gal.z);
+  /* 差速自转：内圈快、外圈慢 */
+  float rate = (1.0 + uDiff * (1.0 - smoothstep(0.0, uGalR, rad))) * (1.0 + 2.6 * uBH);   /* 坍缩时角速度加快 */
+  float angM = uTime * uSpin * rate + 0.30 * sin(uTime * 0.28 + rad * 0.85);
+  float angR = uTime * uSpin;
+  float ca = cos(angM), sa = sin(angM);
+  vec3 g = vec3(gal.x * ca - gal.y * sa, gal.x * sa + gal.y * ca, gal.z);
 
-  float th   = atan(g.y, g.x);
-  /* 双密度波叠加：亮结沿旋臂传播（流动感） */
-  float waveA = sin(th * 3.0 - uTime * 1.7 + rad * 2.1);
-  float waveB = sin(th * 5.0 - uTime * 2.6 + rad * 3.6);
-  float wk = smoothstep(0.10, 1.0, waveA) * 0.55 + smoothstep(0.25, 1.0, waveB) * 0.45;
+  /* 密度波图案（刚性旋转 → 旋臂不会被差速自转缠绕） */
+  float thM = atan(g.y, g.x);
+  float thP = thM - (angM - angR);
+  float armPhase = 2.6 * log(max(0.08, rn) / 0.20);
+  float pd = (thP - armPhase) * uArms / 6.2831853;
+  pd = fract(pd + 0.5) - 0.5;
+  float wk = exp(-pd * pd * 13.0) * aDisk;
 
   /* 沿旋臂切向星流 */
-  vec2 tangDir = vec2(-sin(th), cos(th));
-  g.xy += tangDir * (wk - 0.45) * 0.085 * e;
+  vec2 tangDir = vec2(-sin(thM), cos(thM));
+  g.xy += tangDir * (wk - 0.42) * 0.075 * e;
 
   /* 径向迁移 + 呼吸 */
   float mig = sin(uTime * 0.09 + aRand * 6.2831) * 0.5 + sin(uTime * 0.05 + rad * 1.7) * 0.5;
-  float breath = 1.0 + 0.030 * mig * e
-                     + 0.018 * sin(uTime * 0.55 + rad * 1.35 + aRand * 2.0);
+  float breath = 1.0 + 0.028 * mig * e + 0.016 * sin(uTime * 0.55 + rad * 1.35 + aRand * 2.0);
   g.xy *= breath;
 
   float t = uTime;
@@ -794,25 +1032,29 @@ void main() {
     cos(g.x * 1.70 + t * 0.90 + aRand * 8.0),
     sin((g.x - g.y) * 1.30 + t * 0.60 + aRand * 13.0)
   );
-  g += turb * (0.028 + 0.058 * e) * (0.35 + 0.65 * aRand);
+  g += turb * (0.026 + 0.052 * e) * (0.35 + 0.65 * aRand);
+
+  /* 外围扇形扩散层：缓慢外漂 + 回流 + 噪声扭曲 */
+  if (aFanS > 0.0) {
+    float dr = sin(uTime * 0.10 + aRand * 6.2831) * 0.5 + 0.5;
+    g.xy *= (0.90 + 0.22 * dr);
+    float nz = sin(g.x * 0.9 + uTime * 0.35 + aRand * 11.0) + cos(g.y * 1.1 - uTime * 0.28 + aRand * 7.0);
+    g.xy += vec2(-g.y, g.x) * nz * 0.010;
+  }
 
   float cAng = uTime * 0.45;
   float cc = cos(cAng), cs = sin(cAng);
-  vec3 c = vec3(core.x * cc - core.y * cs,
-                core.x * cs + core.y * cc,
-                core.z);
+  vec3 c = vec3(core.x * cc - core.y * cs, core.x * cs + core.y * cc, core.z);
 
-  vec3 p = mix(c, g, e);
+  float uBHe = clamp(uBH * (1.0 + 0.7 * (1.0 - rn)), 0.0, 1.0);   /* 内圈先落，外圈后随 */
+  vec3 p = mix(c, g, e * (1.0 - uBHe));   /* 黑洞坍缩：向核心收拢 */
 
-  /* 水波纹：从中心向外扩散的环状波（双槽叠加，左手拨动触发） */
-  float pr = length(p.xy);
-  float rdt1 = uTime - uRipples.x, rdt2 = uTime - uRipples.y;
-  float f1 = rdt1 * 3.2, f2 = rdt2 * 3.2;
-  float ring1 = exp(-(pr - f1) * (pr - f1) * 3.5) * exp(-rdt1 * 1.1);
-  float ring2 = exp(-(pr - f2) * (pr - f2) * 3.5) * exp(-rdt2 * 1.1);
-  float rip = (ring1 + ring2) * uRippleAmp;
-  p.z += (sin((pr - f1) * 5.0) * ring1 + sin((pr - f2) * 5.0) * ring2) * uRippleAmp * 0.45;
-  p.xy += (p.xy / max(pr, 1e-3)) * rip * 0.08;
+  /* 点击冲击波：推开后弹性回归 */
+  float sd = length(p.xy - uShock.xy);
+  float st = max(uTime - uShockT, 0.0);
+  float shockRing = exp(-pow(sd - st * 6.0, 2.0) * 1.6) * exp(-st * 1.8) * uShockStr;
+  p.xy += normalize(p.xy - uShock.xy + vec2(1e-4)) * shockRing * 0.9;
+  p.z  += sin(sd * 4.0 - st * 8.0) * shockRing * 0.5;
 
   vec4 wp = modelMatrix * vec4(p, 1.0);
 
@@ -824,7 +1066,6 @@ void main() {
   vec3 tang = normalize(cross(vec3(0.0, 0.0, 1.0), nrm + vec3(1e-4)));
   wp.xyz += tang * infl * 0.35;
 
-  /* 双手扰动场：右手跟随（环境微扰）+ 左手拨动（搅动） */
   wp.xyz = handDisturb(wp.xyz, uHand, uHandVel, uHandStr, uHandRadius, aRand);
   wp.xyz = handDisturb(wp.xyz, uHand2, uHand2Vel, uHand2Str, uHand2Radius, aRand * 0.7 + 0.15);
   float stir = (1.0 - smoothstep(0.0, uHandRadius, length(wp.xyz - uHand))) * uHandStr
@@ -833,18 +1074,68 @@ void main() {
   vec4 mv = viewMatrix * wp;
   gl_Position = projectionMatrix * mv;
 
-  float sizeMul = 0.50 + 0.85 * e;
+  float sizeMul = (0.30 + 0.70 * e) * uSizeMul;
   gl_PointSize = uSize * aSize * sizeMul * uPixelRatio / max(-mv.z, 0.1);
-  gl_PointSize = clamp(gl_PointSize, 0.7, 56.0);
+  gl_PointSize = clamp(gl_PointSize, 0.6, 44.0);
+  vSoft = clamp(gl_PointSize / 26.0, 0.0, 1.0);
 
-  float tw = 0.72 + 0.28 * sin(uTime * (1.2 + aRand * 3.5) + aRand * 41.0);
+  /* 闪烁：亮星更明显 */
+  float twAmp = clamp(aSize * 0.055, 0.12, 0.55);
+  float tw = (1.0 - twAmp) + twAmp * (0.5 + 0.5 * sin(uTime * (1.2 + aRand * 3.5) + aRand * 41.0));
 
-  vColor = aColor;
-  vGlow  = ((0.55 + 0.85 * e) + wk * 0.55 * e + infl * 0.8 + stir * 0.35 + rip * 1.1) * tw;
+  vColor = uHue * aColor;
+  /* 幂律 + 底噪提升：多数星点仍暗，但整体曝光抬高、旋臂主体清晰 */
+  float gb = (0.42 + 0.70 * e) + wk * 0.95 * e + infl * 0.8 + stir * 0.32 + shockRing * 1.6;
+  gb = pow(max(gb, 0.0), 1.85) * 2.45 + 0.010;   /* 幂律：多数极暗，仅少数明亮 */
+  gb *= 1.0 + uBH * 1.8 * (1.0 - smoothstep(0.0, 0.55, rn));   /* 坍缩加热 */
+  gb *= 1.0 + 1.8 * exp(-pow((uBH - 0.78) * 5.0, 2.0));        /* 视界形成前的闪光 */
+  vGlow = gb * tw * uGlowMul;
 }
 `;
 
-const FRAG = /* glsl */`
+/* 普通星点：径向渐变柔边 */
+const FRAG_GLOW = /* glsl */`
+uniform float uOpacity;
+varying vec3  vColor;
+varying float vGlow;
+varying float vSoft;
+
+void main() {
+  vec2  uv = gl_PointCoord - vec2(0.5);
+  float d  = length(uv) * 2.0;
+  if (d > 1.0) discard;
+  float a   = pow(1.0 - d, 1.55);
+  float hot = exp(-d * 7.0) * 0.55;
+  float halo = exp(-d * d * (2.4 - vSoft)) * (0.08 + vSoft * 0.34);   /* 近处虚化光晕 */
+  gl_FragColor = vec4(vColor * vGlow * (1.0 + hot), (a * 0.40 + halo * 0.55) * uOpacity);
+}
+`;
+
+/* 巨星：十字衍射光芒 + 多层辉光 */
+const FRAG_GIANT = /* glsl */`
+uniform float uOpacity;
+varying vec3  vColor;
+varying float vGlow;
+
+void main() {
+  vec2 uv = (gl_PointCoord - vec2(0.5)) * 2.0;
+  float d = length(uv);
+  float core = exp(-d * d * 6.0);
+  float halo = exp(-d * d * 1.7) * 0.42;
+  float ax = abs(uv.x), ay = abs(uv.y);
+  float sx = exp(-ax * 30.0) * exp(-ay * 3.4);
+  float sy = exp(-ay * 30.0) * exp(-ax * 3.4);
+  vec2 r45 = vec2(uv.x + uv.y, uv.x - uv.y) * 0.7071;
+  float s2 = (exp(-abs(r45.x) * 34.0) * exp(-abs(r45.y) * 6.5)
+            + exp(-abs(r45.y) * 34.0) * exp(-abs(r45.x) * 6.5)) * 0.20;
+  float lum = core + halo + (sx + sy) * 0.60 + s2;
+  if (lum < 0.004) discard;
+  gl_FragColor = vec4(vColor * vGlow * lum, min(lum, 1.0) * uOpacity);
+}
+`;
+
+/* 尘埃：normal 混合，压暗后方星点 */
+const FRAG_DUST = /* glsl */`
 uniform float uOpacity;
 varying vec3  vColor;
 varying float vGlow;
@@ -853,9 +1144,8 @@ void main() {
   vec2  uv = gl_PointCoord - vec2(0.5);
   float d  = length(uv) * 2.0;
   if (d > 1.0) discard;
-  float a   = pow(1.0 - d, 1.45);
-  float hot = exp(-d * 7.5) * 0.50;
-  gl_FragColor = vec4(vColor * vGlow * (1.0 + hot), a * uOpacity * 0.42);
+  float a = pow(1.0 - d, 1.5) * clamp(vGlow * 0.22, 0.0, 1.0) * uOpacity;
+  gl_FragColor = vec4(vColor, a);
 }
 `;
 
@@ -876,90 +1166,390 @@ function makeGlowTexture(size, stops) {
   return tex;
 }
 
+/* FBM 值噪声贴图（彩色星云雾气用） */
+function makeFbmTexture(size, seed, octaves) {
+  const c = document.createElement('canvas');
+  c.width = c.height = size;
+  const ctx = c.getContext('2d');
+  const img = ctx.createImageData(size, size);
+  const d = img.data;
+  const hash = (x, y) => {
+    let n = (x * 374761393 + y * 668265263 + seed * 1442695041) | 0;
+    n = (n ^ (n >> 13)) * 1274126177 | 0;
+    return ((n ^ (n >> 16)) >>> 0) / 4294967295;
+  };
+  const vnoise = (x, y) => {
+    const xi = Math.floor(x), yi = Math.floor(y);
+    const xf = x - xi, yf = y - yi;
+    const u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+    const a = hash(xi, yi), b = hash(xi + 1, yi), cc = hash(xi, yi + 1), dd = hash(xi + 1, yi + 1);
+    return (a * (1 - u) + b * u) * (1 - v) + (cc * (1 - u) + dd * u) * v;
+  };
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      let amp = 0.5, freq = 5 / size, sum = 0, norm = 0;
+      for (let o = 0; o < octaves; o++) {
+        sum += amp * vnoise(x * freq, y * freq);
+        norm += amp;
+        amp *= 0.5; freq *= 2.13;
+      }
+      const v = sum / norm;
+      const nx = (x / size - 0.5) * 2, ny = (y / size - 0.5) * 2;
+      const r = Math.sqrt(nx * nx + ny * ny);
+      const fall = Math.max(0, 1 - r);
+      const alpha = Math.pow(v, 1.5) * Math.pow(fall, 1.35);
+      const idx = (y * size + x) * 4;
+      d[idx] = d[idx + 1] = d[idx + 2] = 255;
+      d[idx + 3] = Math.min(255, alpha * 620);
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+  const tex = new THREE.CanvasTexture(c);
+  tex.needsUpdate = true;
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+/* 流星拖尾贴图（右端亮 → 左端透明） */
+function makeStreakTexture(w, h) {
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  const ctx = c.getContext('2d');
+  const g = ctx.createLinearGradient(0, 0, w, 0);
+  g.addColorStop(0.0, 'rgba(255,255,255,0)');
+  g.addColorStop(0.72, 'rgba(220,236,255,0.55)');
+  g.addColorStop(1.0, 'rgba(255,255,255,1)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, w, h);
+  const g2 = ctx.createLinearGradient(0, 0, 0, h);
+  g2.addColorStop(0.0, 'rgba(0,0,0,1)');
+  g2.addColorStop(0.5, 'rgba(0,0,0,0)');
+  g2.addColorStop(1.0, 'rgba(0,0,0,1)');
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.fillStyle = g2;
+  ctx.fillRect(0, 0, w, h);
+  const tex = new THREE.CanvasTexture(c);
+  tex.needsUpdate = true;
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
 const GLOW_TEX = {
   violet:  makeGlowTexture(256, [[0, 'rgba(190,140,255,0.85)'], [0.35, 'rgba(120,70,220,0.30)'], [1, 'rgba(0,0,0,0)']]),
   magenta: makeGlowTexture(256, [[0, 'rgba(255,120,190,0.80)'], [0.35, 'rgba(210,60,150,0.28)'], [1, 'rgba(0,0,0,0)']]),
   cyan:    makeGlowTexture(256, [[0, 'rgba(120,200,255,0.75)'], [0.35, 'rgba(50,110,240,0.26)'], [1, 'rgba(0,0,0,0)']]),
   gold:    makeGlowTexture(256, [[0, 'rgba(255,215,150,0.85)'], [0.35, 'rgba(255,150,70,0.30)'], [1, 'rgba(0,0,0,0)']]),
   core:    makeGlowTexture(256, [[0, 'rgba(255,244,230,0.95)'], [0.25, 'rgba(255,190,140,0.55)'], [0.6, 'rgba(200,90,160,0.18)'], [1, 'rgba(0,0,0,0)']]),
+  neb:     makeFbmTexture(256, 7, 5),
+  neb2:    makeFbmTexture(256, 23, 6),
+  streak:  makeStreakTexture(128, 32),
 };
-
-const NEBULA_SPECS = [
-  { tex: 'violet',  color: 0x9d6bff, n: 7, minR: 0.50, maxR: 3.5, minS: 2.4, maxS: 5.8, op: 0.13 },
-  { tex: 'magenta', color: 0xff63b8, n: 7, minR: 0.55, maxR: 3.3, minS: 2.0, maxS: 5.0, op: 0.12 },
-  { tex: 'cyan',    color: 0x55b6ff, n: 6, minR: 0.85, maxR: 3.9, minS: 1.9, maxS: 4.4, op: 0.11 },
-  { tex: 'gold',    color: 0xffc47a, n: 6, minR: 0.28, maxR: 2.2, minS: 1.2, maxS: 3.0, op: 0.14 },
-];
 
 /* =========================================================
    4. Galaxy 类（3D 倾斜盘面）
    ========================================================= */
 class Galaxy {
   constructor(count) {
-    this.geometry = createGalaxyGeometry(count);
     this.count = count;
-
-    this.uniforms = {
-      uTime:          { value: 0 },
-      uBloom:         { value: 0 },
-      uSize:          { value: 11 },
-      uPixelRatio:    { value: DPR },
-      uOpacity:       { value: 0 },
-      uSpin:          { value: 0.26 },
-      uFocus:         { value: new THREE.Vector3() },
-      uFocusStrength: { value: 0 },
-      uFocusRadius:   { value: 1.15 },
-      uHand:          { value: new THREE.Vector3() },
-      uHandVel:       { value: new THREE.Vector3() },
-      uHandStr:       { value: 0 },
-      uHandRadius:    { value: 1.8 },
-      uHand2:         { value: new THREE.Vector3() },
-      uHand2Vel:      { value: new THREE.Vector3() },
-      uHand2Str:      { value: 0 },
-      uHand2Radius:   { value: 1.6 },
-      uRipples:       { value: new THREE.Vector2(-99, -99) },
-      uRippleAmp:     { value: 0 },
-    };
-
-    this.material = new THREE.ShaderMaterial({
-      uniforms: this.uniforms,
-      vertexShader: VERT,
-      fragmentShader: FRAG,
-      transparent: true,
-      depthWrite: false,
-      depthTest: false,
-      blending: THREE.AdditiveBlending,
-    });
-
-    this.points = new THREE.Points(this.geometry, this.material);
-    this.points.frustumCulled = false;
-
     this.group = new THREE.Group();
     this.group.rotation.order = 'YXZ';
-    this.group.add(this.points);
 
+    /* ---- 共享 uniforms：所有层引用同一批对象 → 一次更新全层生效 ---- */
+    const shared = {
+      uTime: { value: 0 }, uBloom: { value: 0 }, uOpacity: { value: 0 },
+      uSize: { value: 5.5 }, uPixelRatio: { value: DPR }, uSpin: { value: 0.26 },
+      uDiff: { value: 0.30 }, uGalR: { value: GALAXY_R }, uArms: { value: NARMS },
+      uFocus: { value: new THREE.Vector3() }, uFocusStrength: { value: 0 }, uFocusRadius: { value: 1.5 },
+      uHand: { value: new THREE.Vector3() }, uHandVel: { value: new THREE.Vector3() },
+      uHandStr: { value: 0 }, uHandRadius: { value: 1.8 },
+      uHand2: { value: new THREE.Vector3() }, uHand2Vel: { value: new THREE.Vector3() },
+      uHand2Str: { value: 0 }, uHand2Radius: { value: 1.6 },
+      uShock: { value: new THREE.Vector3() }, uShockT: { value: -99 }, uShockStr: { value: 0 },
+      uBH: { value: 0 },
+      uHue: { value: new THREE.Matrix3() },
+    };
+    this.shared = shared;
+
+    /* ---- 4 层粒子（各自独立材质 / 尺寸分布） ---- */
+    this.layers = [];
+    let allocated = 0;
+    for (let li = 0; li < LAYERS.length; li++) {
+      const cfg = LAYERS[li];
+      const n = (li === LAYERS.length - 1) ? Math.max(1, count - allocated) : Math.round(count * cfg.frac);
+      allocated += n;
+      const geo = buildLayerGeometry(cfg, n);
+      const mat = new THREE.ShaderMaterial({
+        uniforms: Object.assign({}, shared, { uGlowMul: { value: cfg.glow }, uSizeMul: { value: 1.0 } }),
+        vertexShader: VERT,
+        fragmentShader: cfg.giant ? FRAG_GIANT : FRAG_GLOW,
+        transparent: true, depthWrite: false, depthTest: false,
+        blending: THREE.AdditiveBlending,
+      });
+      const pts = new THREE.Points(geo, mat);
+      pts.frustumCulled = false;
+      pts.renderOrder = li;
+      this.group.add(pts);
+      this.layers.push({ points: pts, material: mat, geometry: geo, cfg, count: n });
+    }
+
+    /* ---- 尘埃带（normal 混合，压暗旋臂内侧） ---- */
+    const dCount = Math.max(1, Math.round(count * 0.030));   // 更少更柔的尘埃（减少黑点）
+    this.dust = new THREE.Points(buildDustGeometry(dCount), new THREE.ShaderMaterial({
+      uniforms: Object.assign({}, shared, { uGlowMul: { value: 1.0 }, uSizeMul: { value: 1.0 } }),
+      vertexShader: VERT,
+      fragmentShader: FRAG_DUST,
+      transparent: true, depthWrite: false, depthTest: false,
+      blending: THREE.NormalBlending,
+    }));
+    this.dust.frustumCulled = false;
+    this.dust.renderOrder = 20;
+    this.group.add(this.dust);
+
+    /* ---- 外围扇形扩散层（少量大面片 / 稀疏星流） ---- */
+    const fCount = Math.max(1, Math.round(count * 0.14));
+    this.fan = new THREE.Points(buildFanGeometry(fCount, FAN_CFG), new THREE.ShaderMaterial({
+      uniforms: Object.assign({}, shared, { uGlowMul: { value: 0.72 }, uSizeMul: { value: 1.0 } }),
+      vertexShader: VERT,
+      fragmentShader: FRAG_GLOW,
+      transparent: true, depthWrite: false, depthTest: false,
+      blending: THREE.AdditiveBlending,
+    }));
+    this.fan.frustumCulled = false;
+    this.fan.renderOrder = 2;
+    this.group.add(this.fan);
+
+    /* ---- 黑洞形态（握拳触发）：事件视界 + 光子环 + 吸积盘 + 相对论喷流 ---- */
+    const bhDiskN = Math.max(3000, Math.round(count * 0.045));
+    const bhJetN  = Math.max(1400, Math.round(count * 0.018));
+
+    const dGeo = new THREE.BufferGeometry();
+    {
+      const dPos  = new Float32Array(bhDiskN * 3);
+      const dR    = new Float32Array(bhDiskN);
+      const dAng  = new Float32Array(bhDiskN);
+      const dTh   = new Float32Array(bhDiskN);
+      const dSeed = new Float32Array(bhDiskN);
+      for (let i = 0; i < bhDiskN; i++) {
+        const rn = Math.pow(Math.random(), 1.6);          /* 内圈更密 */
+        const r  = 0.85 + 2.35 * rn;
+        const ang = Math.random() * TAU;
+        dR[i] = rn; dAng[i] = ang;
+        dTh[i] = gauss() * (0.065 + 0.11 * rn);
+        dSeed[i] = Math.random();
+        dPos[i * 3] = Math.cos(ang) * r; dPos[i * 3 + 1] = Math.sin(ang) * r; dPos[i * 3 + 2] = 0;
+      }
+      dGeo.setAttribute('position', new THREE.BufferAttribute(dPos, 3));
+      dGeo.setAttribute('aR',    new THREE.BufferAttribute(dR, 1));
+      dGeo.setAttribute('aAng',  new THREE.BufferAttribute(dAng, 1));
+      dGeo.setAttribute('aTh',   new THREE.BufferAttribute(dTh, 1));
+      dGeo.setAttribute('aSeed', new THREE.BufferAttribute(dSeed, 1));
+      dGeo.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), 9);
+    }
+    const BH_DISK_V = /* glsl */`
+      attribute float aR, aAng, aTh, aSeed;
+      uniform float uTime, uSize, uPixelRatio, uHalf, uSpinZ;
+      varying vec3 vColor;
+      varying float vA;
+      void main() {
+        float r = 0.85 + 2.35 * aR;
+        float w = 1.35 / pow(r, 1.35);               /* 开普勒差速：内快外慢 */
+        float ang = aAng + uTime * w;
+        vec3 p = vec3(cos(ang) * r, sin(ang) * r, aTh);
+        float dop = pow(0.5 + 0.5 * cos(ang), 2.7);  /* 多普勒增亮：迎向观察者一侧 */
+        float heat = 1.0 - aR;
+        vec3 hot = vec3(1.00, 0.94, 0.86);
+        vec3 cool = vec3(1.00, 0.46, 0.18);
+        vColor = mix(cool, hot, heat * heat) * (0.50 + 1.85 * dop) + vec3(0.0, 0.10, 0.32) * dop * heat;
+        vA = (0.38 + 0.72 * dop) * (1.0 - 0.40 * aR);
+        vec4 mv = modelViewMatrix * vec4(p, 1.0);
+        gl_Position = projectionMatrix * mv;
+        gl_PointSize = clamp(uSize * (0.75 + 0.5 * aSeed) * (1.25 - 0.65 * aR) * uPixelRatio / max(-mv.z, 0.1), 0.6, 22.0);
+        /* 自旋后的纵深分量 → 近/远半分割（远半被视界遮挡，近半从阴影前方穿过） */
+        float yn = p.x * sin(uSpinZ) + p.y * cos(uSpinZ);
+        if (yn * uHalf < 0.0) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); gl_PointSize = 0.0; }
+      }`;
+    const BH_FRAG = /* glsl */`
+      varying vec3 vColor;
+      varying float vA;
+      uniform float uOpacity;
+      void main() {
+        vec2 uv = gl_PointCoord - vec2(0.5);
+        float d = length(uv) * 2.0;
+        if (d > 1.0) discard;
+        float a = pow(1.0 - d, 1.7);
+        gl_FragColor = vec4(vColor, a * vA * uOpacity);
+      }`;
+
+    const jGeo = new THREE.BufferGeometry();
+    {
+      const jPos  = new Float32Array(bhJetN * 3);
+      const jSide = new Float32Array(bhJetN);
+      const jOffR = new Float32Array(bhJetN);
+      const jOffA = new Float32Array(bhJetN);
+      const jPh   = new Float32Array(bhJetN);
+      for (let i = 0; i < bhJetN; i++) {
+        jSide[i] = Math.random() < 0.5 ? 1 : -1;
+        jOffR[i] = Math.pow(Math.random(), 0.7);
+        jOffA[i] = Math.random() * TAU;
+        jPh[i] = Math.random();
+      }
+      jGeo.setAttribute('position', new THREE.BufferAttribute(jPos, 3));
+      jGeo.setAttribute('aSide', new THREE.BufferAttribute(jSide, 1));
+      jGeo.setAttribute('aOffR', new THREE.BufferAttribute(jOffR, 1));
+      jGeo.setAttribute('aOffA', new THREE.BufferAttribute(jOffA, 1));
+      jGeo.setAttribute('aPh',   new THREE.BufferAttribute(jPh, 1));
+      jGeo.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), 9);
+    }
+    const BH_JET_V = /* glsl */`
+      attribute float aSide, aOffR, aOffA, aPh;
+      uniform float uTime, uSize, uPixelRatio;
+      varying vec3 vColor;
+      varying float vA;
+      void main() {
+        float pr = fract(aPh + uTime * 0.075);       /* 外流进度 */
+        float z  = aSide * pr * 4.6;
+        float rr = (0.055 + 0.55 * pr * pr) * aOffR;
+        vec3 p = vec3(cos(aOffA) * rr, sin(aOffA) * rr, z);
+        vA = smoothstep(0.0, 0.12, pr) * (1.0 - pr) * (0.35 + 0.65 * (1.0 - aOffR));
+        vColor = mix(vec3(0.55, 0.75, 1.0), vec3(0.90, 0.96, 1.0), 1.0 - aOffR);
+        vec4 mv = modelViewMatrix * vec4(p, 1.0);
+        gl_Position = projectionMatrix * mv;
+        gl_PointSize = clamp(uSize * (0.8 + 0.6 * aOffR) * uPixelRatio / max(-mv.z, 0.1), 0.6, 14.0);
+      }`;
+
+    const BH_QUAD_V = /* glsl */`
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }`;
+    const BH_SHADOW_F = /* glsl */`
+      varying vec2 vUv;
+      uniform float uOpacity;
+      void main() {
+        vec2 uv = (vUv - 0.5) * 2.0;
+        float d = length(uv);
+        float a = 1.0 - smoothstep(0.86, 0.98, d);
+        gl_FragColor = vec4(0.0, 0.0, 0.0, a * uOpacity);
+      }`;
+    /* 环绕光带（透镜化吸积盘二次像）：XZ 平面立体粒子环，随视角产生真实视差 */
+    const bhBandN = Math.max(5000, Math.round(count * 0.055));
+    const bGeo = new THREE.BufferGeometry();
+    {
+      const bPos  = new Float32Array(bhBandN * 3);
+      const bT    = new Float32Array(bhBandN);
+      const bR    = new Float32Array(bhBandN);
+      const bY    = new Float32Array(bhBandN);
+      const bSeed = new Float32Array(bhBandN);
+      for (let i = 0; i < bhBandN; i++) {
+        const t  = Math.random() * TAU;
+        const rr = 0.88 + 0.50 * Math.pow(Math.random(), 1.55);   /* 内缘更密 → 亮环 */
+        bT[i] = t; bR[i] = rr;
+        bY[i] = gauss() * 0.055;
+        bSeed[i] = Math.random();
+        bPos[i * 3] = Math.cos(t) * rr; bPos[i * 3 + 1] = 0; bPos[i * 3 + 2] = Math.sin(t) * rr;
+      }
+      bGeo.setAttribute('position', new THREE.BufferAttribute(bPos, 3));
+      bGeo.setAttribute('aT',    new THREE.BufferAttribute(bT, 1));
+      bGeo.setAttribute('aR',    new THREE.BufferAttribute(bR, 1));
+      bGeo.setAttribute('aY',    new THREE.BufferAttribute(bY, 1));
+      bGeo.setAttribute('aSeed', new THREE.BufferAttribute(bSeed, 1));
+      bGeo.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), 9);
+    }
+    const BH_BAND_V = /* glsl */`
+      attribute float aT, aR, aY, aSeed;
+      uniform float uTime, uSize, uPixelRatio;
+      varying vec3 vColor;
+      varying float vA;
+      void main() {
+        float ang = aT + uTime * (0.22 + 0.20 * aSeed);          /* 缓慢环绕流动 */
+        vec3 p = vec3(cos(ang) * aR, aY, sin(ang) * aR);
+        float inner = 1.0 - smoothstep(0.86, 1.30, aR);
+        float flick = 0.80 + 0.20 * sin(uTime * (1.3 + aSeed * 2.2) + aSeed * 41.0);
+        vColor = mix(vec3(1.00, 0.88, 0.66), vec3(1.00, 0.98, 0.94), inner) * (0.45 + 0.85 * inner);
+        vA = flick * (0.28 + 0.68 * inner);
+        vec4 mv = modelViewMatrix * vec4(p, 1.0);
+        gl_Position = projectionMatrix * mv;
+        gl_PointSize = clamp(uSize * (0.65 + 0.7 * aSeed) * uPixelRatio / max(-mv.z, 0.1), 0.6, 18.0);
+      }`;
+
+    this.bhFx = {};
+    {
+      const fx = this.bhFx;
+      /* 远半：画在视界阴影之前（被遮挡）；近半：画在阴影之后（穿过前方） */
+      fx.diskFarMat = new THREE.ShaderMaterial({
+        uniforms: { uTime: { value: 0 }, uSize: { value: 6.6 }, uPixelRatio: { value: DPR }, uOpacity: { value: 0 }, uHalf: { value: -1 }, uSpinZ: { value: 0 } },
+        vertexShader: BH_DISK_V, fragmentShader: BH_FRAG,
+        transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending,
+      });
+      fx.diskFar = new THREE.Points(dGeo, fx.diskFarMat);
+      fx.diskFar.frustumCulled = false; fx.diskFar.renderOrder = 23; fx.diskFar.visible = false;
+      this.group.add(fx.diskFar);
+
+      fx.diskNearMat = new THREE.ShaderMaterial({
+        uniforms: { uTime: { value: 0 }, uSize: { value: 6.6 }, uPixelRatio: { value: DPR }, uOpacity: { value: 0 }, uHalf: { value: 1 }, uSpinZ: { value: 0 } },
+        vertexShader: BH_DISK_V, fragmentShader: BH_FRAG,
+        transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending,
+      });
+      fx.diskNear = new THREE.Points(dGeo, fx.diskNearMat);
+      fx.diskNear.frustumCulled = false; fx.diskNear.renderOrder = 30; fx.diskNear.visible = false;
+      this.group.add(fx.diskNear);
+
+      fx.jetMat = new THREE.ShaderMaterial({
+        uniforms: { uTime: { value: 0 }, uSize: { value: 4.2 }, uPixelRatio: { value: DPR }, uOpacity: { value: 0 } },
+        vertexShader: BH_JET_V, fragmentShader: BH_FRAG,
+        transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending,
+      });
+      fx.jet = new THREE.Points(jGeo, fx.jetMat);
+      fx.jet.frustumCulled = false; fx.jet.renderOrder = 26; fx.jet.visible = false;
+      this.group.add(fx.jet);
+
+      fx.shadowMat = new THREE.ShaderMaterial({
+        uniforms: { uOpacity: { value: 0 } },
+        vertexShader: BH_QUAD_V, fragmentShader: BH_SHADOW_F,
+        transparent: true, depthWrite: false, depthTest: false, blending: THREE.NormalBlending,
+      });
+      fx.shadow = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), fx.shadowMat);
+      fx.shadow.frustumCulled = false; fx.shadow.renderOrder = 28; fx.shadow.visible = false;
+      this.group.add(fx.shadow);
+
+      fx.bandMat = new THREE.ShaderMaterial({
+        uniforms: { uTime: { value: 0 }, uSize: { value: 4.2 }, uPixelRatio: { value: DPR }, uOpacity: { value: 0 } },
+        vertexShader: BH_BAND_V, fragmentShader: BH_FRAG,
+        transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending,
+      });
+      fx.band = new THREE.Points(bGeo, fx.bandMat);
+      fx.band.frustumCulled = false; fx.band.renderOrder = 31; fx.band.visible = false;
+      this.group.add(fx.band);
+    }
+
+    /* ---- 星云雾气（FBM 噪声贴图，沿旋臂铺开，additive） ---- */
     this.sprites = [];
-    for (const spec of NEBULA_SPECS) {
+    const NEB = [
+      { tex: 'neb',  color: 0xff5aa8, n: 9, op: 0.18, smin: 1.05, smax: 2.6 },
+      { tex: 'neb',  color: 0x9a5cff, n: 8, op: 0.17, smin: 1.15, smax: 2.8 },
+      { tex: 'neb2', color: 0x4fa8ff, n: 7, op: 0.15, smin: 1.15, smax: 2.6 },
+      { tex: 'neb',  color: 0xffc47a, n: 5, op: 0.16, smin: 0.85, smax: 1.9 },
+    ];
+    for (const spec of NEB) {
       for (let s = 0; s < spec.n; s++) {
         const mat = new THREE.SpriteMaterial({
-          map: GLOW_TEX[spec.tex],
-          color: spec.color,
-          transparent: true,
-          opacity: 0,
-          blending: THREE.AdditiveBlending,
-          depthWrite: false,
-          depthTest: false,
+          map: GLOW_TEX[spec.tex], color: spec.color,
+          transparent: true, opacity: 0, blending: THREE.AdditiveBlending,
+          depthWrite: false, depthTest: false,
         });
         const sp = new THREE.Sprite(mat);
-        const ang = Math.random() * TAU;
-        const r = spec.minR + (spec.maxR - spec.minR) * Math.pow(Math.random(), 0.75);
-        sp.position.set(Math.cos(ang) * r, Math.sin(ang) * r, gauss() * 0.24);
-        const sc = spec.minS + (spec.maxS - spec.minS) * Math.random();
+        const arm = (Math.random() * NARMS) | 0;
+        const rn = 0.15 + 0.85 * Math.pow(Math.random(), 0.85);
+        const th = armAngle(arm, rn) + gauss() * 0.22;
+        sp.position.set(Math.cos(th) * rn * GALAXY_R, Math.sin(th) * rn * GALAXY_R, gauss() * 0.22);
+        const sc = spec.smin + (spec.smax - spec.smin) * Math.random();
         sp.scale.set(sc, sc, 1);
+        sp.renderOrder = 5;
         sp.userData = {
           base: sc,
-          op: spec.op * (0.7 + Math.random() * 0.6),
-          rot: (Math.random() - 0.5) * 0.5,
+          op: spec.op * (0.6 + Math.random() * 0.7),
+          rot: (Math.random() - 0.5) * 0.8,
           phase: Math.random() * TAU,
         };
         this.group.add(sp);
@@ -967,24 +1557,101 @@ class Galaxy {
       }
     }
 
-    const coreMat = new THREE.SpriteMaterial({
-      map: GLOW_TEX.core,
-      transparent: true,
-      opacity: 0,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-      depthTest: false,
-    });
-    this.coreGlow = new THREE.Sprite(coreMat);
-    this.coreGlow.scale.set(2.0, 2.0, 1);
+    /* ---- 雾状辉光底色：大面积柔和渐变 + FBM 噪声 → 连续的乳白-暖金-蓝紫光带 ----
+       星点之间不再出现大片黑洞；即使自适应降低粒子量，光带亮度依然保留 */
+    const FOG = [
+      { color: 0xfff0d8, n: 8, op: 0.115, smin: 2.6, smax: 5.6 },   // 乳白
+      { color: 0xffd9a0, n: 5, op: 0.105, smin: 2.2, smax: 4.8 },   // 暖金
+      { color: 0xb98cff, n: 5, op: 0.100, smin: 2.6, smax: 5.8 },   // 蓝紫
+      { color: 0x7fb4ff, n: 3, op: 0.090, smin: 2.8, smax: 6.2 },   // 蓝
+    ];
+    for (const spec of FOG) {
+      for (let s = 0; s < spec.n; s++) {
+        const sp = new THREE.Sprite(new THREE.SpriteMaterial({
+          map: GLOW_TEX.neb, color: spec.color,
+          transparent: true, opacity: 0, blending: THREE.AdditiveBlending,
+          depthWrite: false, depthTest: false,
+        }));
+        const arm = (Math.random() * NARMS) | 0;
+        const rn = 0.12 + 0.88 * Math.pow(Math.random(), 0.85);
+        const th = armAngle(arm, rn) + gauss() * 0.30;
+        sp.position.set(Math.cos(th) * rn * GALAXY_R, Math.sin(th) * rn * GALAXY_R, gauss() * 0.30);
+        const sc = spec.smin + (spec.smax - spec.smin) * Math.random();
+        sp.scale.set(sc, sc, 1);
+        sp.renderOrder = 4;
+        sp.userData = { base: sc, op: spec.op * (0.65 + Math.random() * 0.7), rot: (Math.random() - 0.5) * 0.9, phase: Math.random() * TAU };
+        this.group.add(sp);
+        this.sprites.push(sp);
+      }
+    }
+
+    /* ---- 外围星晕 / 稀疏漫射光：让银河边缘自然融入背景，无生硬边界 ---- */
+    const OUTER = [
+      { color: 0xcfd8ff, n: 3, op: 0.055, smin: 8.0, smax: 12.5 },
+      { color: 0xffc9a0, n: 2, op: 0.050, smin: 7.0, smax: 10.5 },
+    ];
+    for (const spec of OUTER) {
+      for (let s = 0; s < spec.n; s++) {
+        const sp = new THREE.Sprite(new THREE.SpriteMaterial({
+          map: GLOW_TEX.neb, color: spec.color,
+          transparent: true, opacity: 0, blending: THREE.AdditiveBlending,
+          depthWrite: false, depthTest: false,
+        }));
+        const th = Math.random() * TAU;
+        const rr = GALAXY_R * (0.85 + 0.9 * Math.random());
+        sp.position.set(Math.cos(th) * rr, Math.sin(th) * rr, gauss() * 0.5);
+        const sc = spec.smin + (spec.smax - spec.smin) * Math.random();
+        sp.scale.set(sc, sc, 1);
+        sp.renderOrder = 3;
+        sp.userData = { base: sc, op: spec.op * (0.7 + Math.random() * 0.6), rot: (Math.random() - 0.5) * 0.9, phase: Math.random() * TAU };
+        this.group.add(sp);
+        this.sprites.push(sp);
+      }
+    }
+
+    /* ---- 银核：白金核心 + 橙色内晕 + 紫蓝外晕（多层辉光叠加） ---- */
+    this.coreGlow = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: GLOW_TEX.core, transparent: true, opacity: 0,
+      blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false,
+    }));
+    this.coreGlow.scale.set(2.6, 2.6, 1);
+    this.coreGlow.renderOrder = 16;
     this.group.add(this.coreGlow);
+
+    this.coreGlow2 = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: GLOW_TEX.gold, color: 0xff9a50, transparent: true, opacity: 0,
+      blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false,
+    }));
+    this.coreGlow2.scale.set(5.4, 5.4, 1);
+    this.coreGlow2.renderOrder = 15;
+    this.group.add(this.coreGlow2);
+
+    this.coreHalo = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: GLOW_TEX.neb, color: 0x8a6cff, transparent: true, opacity: 0,
+      blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false,
+    }));
+    this.coreHalo.scale.set(9.5, 9.5, 1);
+    this.coreHalo.renderOrder = 14;
+    this.group.add(this.coreHalo);
   }
 
   dispose() {
-    this.geometry.dispose();
-    this.material.dispose();
+    for (const L of this.layers) { L.geometry.dispose(); L.material.dispose(); }
+    this.dust.geometry.dispose();
+    this.dust.material.dispose();
+    this.fan.geometry.dispose();
+    this.fan.material.dispose();
+    if (this.bhFx) {
+      this.bhFx.diskFar.geometry.dispose();
+      this.bhFx.diskFarMat.dispose(); this.bhFx.diskNearMat.dispose();
+      this.bhFx.band.geometry.dispose();   this.bhFx.bandMat.dispose();
+      this.bhFx.jet.geometry.dispose();    this.bhFx.jet.material.dispose();
+      this.bhFx.shadow.geometry.dispose(); this.bhFx.shadow.material.dispose();
+    }
     for (const sp of this.sprites) sp.material.dispose();
     this.coreGlow.material.dispose();
+    this.coreGlow2.material.dispose();
+    this.coreHalo.material.dispose();
   }
 }
 
@@ -1005,33 +1672,34 @@ renderer.setClearColor(0x000000, 1);   // 黑底 + CSS screen 混合 → 视频�
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 200);
-camera.position.set(0, 0, 6.2);
+camera.position.set(0, 0, 13.5);   // 开场：从远处缓缓推入
 camera.lookAt(0, 0, 0);
 
-/* ---- 全屏流动星空背景：三层视差星尘 + 漂移星云 + 远处河外星系 ---- */
-let bgFlowMat = null;
+/* ---- 背景星空 / 深空（远景星 + 星芒亮星 + 星云 + 河外星系 + 流星） ---- */
+const bgGroup = new THREE.Group();
+scene.add(bgGroup);
 const bgClouds = [];
 const bgGalaxies = [];
+let bgStarsMat = null, bgBrightMat = null;
 
 (function createBackground() {
-  /* ① 流动星尘：xy 存入 [0,BOX) 循环箱，z 为深度层，shader 内按流向匀速流动 */
-  const N = MOBILE ? 1500 : 4200;
-  const BOX = 60;
+  /* ① 3000+ 背景远景星（大小 / 亮度 / 色温各异，缓慢漂移 + 闪烁） */
+  const N = MOBILE ? 5200 : 6600;   // 5000+ 背景星
+  const BOX = 70;
   const p = new Float32Array(N * 3);
-  const f = new Float32Array(N * 3);   // 流向(归一化 xy) + 速度(z)
+  const f = new Float32Array(N * 3);
   const s = new Float32Array(N);
   const c = new Float32Array(N * 3);
   const seed = new Float32Array(N);
   const rgb = [0, 0, 0];
 
   const LAYERS = [
-    { z: -38, n: 0.45, size: 0.8, dim: 0.35, speed: 0.4 },
-    { z: -24, n: 0.33, size: 1.1, dim: 0.50, speed: 0.9 },
-    { z: -13, n: 0.22, size: 1.5, dim: 0.70, speed: 1.8 },
+    { z: -46, n: 0.45, size: 0.8, dim: 0.42, speed: 0.25 },
+    { z: -28, n: 0.33, size: 1.2, dim: 0.62, speed: 0.6 },
+    { z: -15, n: 0.22, size: 1.8, dim: 0.88, speed: 1.2 },
   ];
 
-  let idx = 0;
-  let budget = N;
+  let idx = 0, budget = N;
   for (let li = 0; li < LAYERS.length; li++) {
     const L = LAYERS[li];
     const cnt = li === LAYERS.length - 1 ? budget : Math.round(N * L.n);
@@ -1047,10 +1715,10 @@ const bgGalaxies = [];
       s[idx] = L.size * (0.5 + Math.random());
 
       const t = Math.random();
-      if (t < 0.35)      { rgb[0] = 0.55; rgb[1] = 0.62; rgb[2] = 1.00; }
-      else if (t < 0.60) { rgb[0] = 0.62; rgb[1] = 0.48; rgb[2] = 1.00; }
-      else if (t < 0.85) { rgb[0] = 1.00; rgb[1] = 0.55; rgb[2] = 0.85; }
-      else               { rgb[0] = 1.00; rgb[1] = 0.85; rgb[2] = 0.65; }
+      if (t < 0.30)      { rgb[0] = 0.62; rgb[1] = 0.72; rgb[2] = 1.00; }
+      else if (t < 0.60) { rgb[0] = 0.86; rgb[1] = 0.90; rgb[2] = 1.00; }
+      else if (t < 0.82) { rgb[0] = 1.00; rgb[1] = 0.95; rgb[2] = 0.88; }
+      else               { rgb[0] = 1.00; rgb[1] = 0.72; rgb[2] = 0.45; }
 
       const d = L.dim * (0.35 + Math.random() * 0.65);
       c[idx * 3]     = rgb[0] * d;
@@ -1066,9 +1734,9 @@ const bgGalaxies = [];
   g.setAttribute('aSize',    new THREE.BufferAttribute(s, 1));
   g.setAttribute('aColor',   new THREE.BufferAttribute(c, 3));
   g.setAttribute('aSeed',    new THREE.BufferAttribute(seed, 1));
-  g.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, -25), 100);
+  g.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, -30), 120);
 
-  bgFlowMat = new THREE.ShaderMaterial({
+  bgStarsMat = new THREE.ShaderMaterial({
     uniforms: { uTime: { value: 0 }, uPR: { value: DPR }, uBox: { value: BOX } },
     vertexShader: `
       uniform float uTime; uniform float uPR; uniform float uBox;
@@ -1085,10 +1753,10 @@ const bgGalaxies = [];
         p.xy = mod(p.xy + dir * (aFlow.z * uTime) + vec2(wob), uBox) - uBox * 0.5;
         vec4 mv = modelViewMatrix * vec4(p, 1.0);
         gl_Position = projectionMatrix * mv;
-        gl_PointSize = aSize * 1.4 * uPR * (20.0 / max(-mv.z, 1.0));
-        gl_PointSize = clamp(gl_PointSize, 0.6, 7.0);
+        gl_PointSize = aSize * 1.5 * uPR * (20.0 / max(-mv.z, 1.0));
+        gl_PointSize = clamp(gl_PointSize, 0.6, 8.0);
         vC = aColor;
-        vA = 0.35 + 0.5 * (0.5 + 0.5 * sin(uTime * 0.6 + aSeed * 7.0));
+        vA = 0.30 + 0.55 * (0.5 + 0.5 * sin(uTime * 0.7 + aSeed * 7.0));
       }`,
     fragmentShader: `
       varying vec3 vC;
@@ -1097,21 +1765,87 @@ const bgGalaxies = [];
         vec2 uv = gl_PointCoord - vec2(0.5);
         float d = length(uv) * 2.0;
         if (d > 1.0) discard;
-        gl_FragColor = vec4(vC * vA, pow(1.0 - d, 1.6) * 0.6);
+        float core = pow(1.0 - d, 2.2);
+        float halo = exp(-d * d * 2.4) * 0.30;   /* 部分星带柔和光晕 */
+        float lum = core + halo;
+        gl_FragColor = vec4(vC * vA * lum, lum * 0.62);
       }`,
-    transparent: true,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending,
+    transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending,
   });
-  const pts = new THREE.Points(g, bgFlowMat);
+  const pts = new THREE.Points(g, bgStarsMat);
   pts.frustumCulled = false;
-  scene.add(pts);
+  pts.renderOrder = -20;
+  bgGroup.add(pts);
 
-  /* ② 远处漂移星云（大光斑缓慢飘动） */
+  /* ② 明亮大星（四角星芒） */
+  const BN = MOBILE ? 34 : 54;
+  const bp = new Float32Array(BN * 3);
+  const bs = new Float32Array(BN);
+  const bc = new Float32Array(BN * 3);
+  const bseed = new Float32Array(BN);
+  for (let i = 0; i < BN; i++) {
+    const th = Math.random() * TAU;
+    const rr = 16 + Math.random() * 26;
+    bp[i * 3]     = Math.cos(th) * rr;
+    bp[i * 3 + 1] = Math.sin(th) * rr * 0.7;
+    bp[i * 3 + 2] = -16 - Math.random() * 22;
+    bs[i] = 5 + Math.random() * 10;
+    const t = Math.random();
+    if (t < 0.35)      { bc[i * 3] = 0.72; bc[i * 3 + 1] = 0.82; bc[i * 3 + 2] = 1.00; }
+    else if (t < 0.70) { bc[i * 3] = 0.95; bc[i * 3 + 1] = 0.96; bc[i * 3 + 2] = 1.00; }
+    else               { bc[i * 3] = 1.00; bc[i * 3 + 1] = 0.80; bc[i * 3 + 2] = 0.55; }
+    bseed[i] = Math.random() * 40;
+  }
+  const bg2 = new THREE.BufferGeometry();
+  bg2.setAttribute('position', new THREE.BufferAttribute(bp, 3));
+  bg2.setAttribute('aSize',    new THREE.BufferAttribute(bs, 1));
+  bg2.setAttribute('aColor',   new THREE.BufferAttribute(bc, 3));
+  bg2.setAttribute('aSeed',    new THREE.BufferAttribute(bseed, 1));
+  bg2.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, -26), 80);
+
+  bgBrightMat = new THREE.ShaderMaterial({
+    uniforms: { uTime: { value: 0 }, uPR: { value: DPR } },
+    vertexShader: `
+      uniform float uTime; uniform float uPR;
+      attribute float aSize;
+      attribute vec3  aColor;
+      attribute float aSeed;
+      varying vec3  vC;
+      varying float vA;
+      void main(){
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        gl_Position = projectionMatrix * mv;
+        gl_PointSize = aSize * uPR * (20.0 / max(-mv.z, 1.0));
+        gl_PointSize = clamp(gl_PointSize, 3.0, 70.0);
+        vC = aColor;
+        vA = 0.62 + 0.38 * sin(uTime * (0.7 + aSeed * 0.05) + aSeed);
+      }`,
+    fragmentShader: `
+      varying vec3  vC;
+      varying float vA;
+      void main(){
+        vec2 uv = (gl_PointCoord - vec2(0.5)) * 2.0;
+        float d = length(uv);
+        float core = exp(-d * d * 9.0);
+        float ax = abs(uv.x), ay = abs(uv.y);
+        float sx = exp(-ax * 34.0) * exp(-ay * 4.0);
+        float sy = exp(-ay * 34.0) * exp(-ax * 4.0);
+        float lum = core + (sx + sy) * 0.5;
+        if (lum < 0.004) discard;
+        gl_FragColor = vec4(vC * vA * lum, min(lum, 1.0));
+      }`,
+    transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending,
+  });
+  const bpts = new THREE.Points(bg2, bgBrightMat);
+  bpts.frustumCulled = false;
+  bpts.renderOrder = -19;
+  bgGroup.add(bpts);
+
+  /* ③ 远处漂移星云 */
   const CLOUD_SPECS = [
-    { tex: 'violet',  color: 0x6a4dcc, n: 3, op: 0.10 },
-    { tex: 'magenta', color: 0xcc4d96, n: 2, op: 0.08 },
-    { tex: 'cyan',    color: 0x3f6fcc, n: 3, op: 0.09 },
+    { tex: 'violet',  color: 0x6a4dcc, n: 2, op: 0.11 },
+    { tex: 'magenta', color: 0xcc4d96, n: 1, op: 0.09 },
+    { tex: 'cyan',    color: 0x3f6fcc, n: 2, op: 0.10 },
   ];
   for (const spec of CLOUD_SPECS) {
     for (let i = 0; i < spec.n; i++) {
@@ -1121,20 +1855,21 @@ const bgGalaxies = [];
         blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false,
       });
       const sp = new THREE.Sprite(mat);
-      sp.position.set((Math.random() - 0.5) * 40, (Math.random() - 0.5) * 26, -18 - Math.random() * 18);
-      const sc = 6 + Math.random() * 10;
+      sp.position.set((Math.random() - 0.5) * 44, (Math.random() - 0.5) * 28, -18 - Math.random() * 18);
+      const sc = 3.4 + Math.random() * 4.4;
       sp.scale.set(sc, sc, 1);
+      sp.renderOrder = -18;
       sp.userData = {
         base: sc,
         drift: { x: (Math.random() - 0.5) * 0.15, y: (Math.random() - 0.5) * 0.1 },
         phase: Math.random() * TAU,
       };
-      scene.add(sp);
+      bgGroup.add(sp);
       bgClouds.push(sp);
     }
   }
 
-  /* ③ 远处河外星系（拉伸光斑 = 侧向星系盘） */
+  /* ④ 远处小型星系光斑（拉伸光斑 = 侧向星系盘） */
   const BG_GALAXIES = [
     { color: 0x8f7bff, x: -14, y:  6, sc: 3.2, op: 0.35 },
     { color: 0x6fa8ff, x:  15, y: -5, sc: 2.6, op: 0.30 },
@@ -1150,11 +1885,260 @@ const bgGalaxies = [];
     const sp = new THREE.Sprite(mat);
     sp.position.set(spec.x, spec.y, -26 - Math.random() * 8);
     sp.scale.set(spec.sc, spec.sc * 0.42, 1);
+    sp.renderOrder = -17;
     sp.userData = { rot: Math.random() * TAU };
-    scene.add(sp);
+    bgGroup.add(sp);
     bgGalaxies.push(sp);
   }
 })();
+
+function updateBackground(now, dt) {
+  if (bgStarsMat) bgStarsMat.uniforms.uTime.value = now;
+  if (bgBrightMat) bgBrightMat.uniforms.uTime.value = now;
+
+  /* 鼠标视差（背景反向微移） */
+  bgGroup.position.x = damp(bgGroup.position.x, dyn.parallax.x * 1.8, 3, dt);
+  bgGroup.position.y = damp(bgGroup.position.y, dyn.parallax.y * 1.8, 3, dt);
+
+  for (const sp of bgClouds) {
+    sp.position.x += sp.userData.drift.x * dt;
+    sp.position.y += sp.userData.drift.y * dt;
+    const pulse = 1 + 0.09 * Math.sin(now * 0.4 + sp.userData.phase);
+    sp.scale.setScalar(sp.userData.base * pulse);
+  }
+  for (const sp of bgGalaxies) sp.material.rotation = sp.userData.rot + now * 0.02;
+}
+
+/* ---- 流星（带渐隐拖尾） ---- */
+const meteors = [];
+function spawnMeteor() {
+  const g = new THREE.Group();
+  const head = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: GLOW_TEX.core, color: 0xffffff, transparent: true, opacity: 0,
+    blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false,
+  }));
+  head.scale.set(1.6, 1.6, 1);
+  head.renderOrder = -15;
+  const tail = new THREE.Sprite(new THREE.SpriteMaterial({
+    map: GLOW_TEX.streak, color: 0xbfe4ff, transparent: true, opacity: 0,
+    blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false,
+  }));
+  tail.renderOrder = -15;
+  g.add(tail); g.add(head);
+
+  const dir = Math.random() < 0.5 ? 1 : -1;
+  const ang = (0.10 + Math.random() * 0.35) * (Math.random() < 0.5 ? 1 : -1);
+  g.position.set(-dir * 24, 9 + Math.random() * 12, -13 - Math.random() * 14);
+  bgGroup.add(g);
+  meteors.push({
+    g, head, tail, dir, ang,
+    spd: 9 + Math.random() * 11,
+    life: 0, dur: 1.7 + Math.random() * 1.5,
+  });
+}
+function updateMeteors(now, dt) {
+  if (meteors.length < 2 && Math.random() < 0.0045) spawnMeteor();
+  for (let i = meteors.length - 1; i >= 0; i--) {
+    const m = meteors[i];
+    m.life += dt;
+    const t = m.life / m.dur;
+    if (t >= 1) {
+      bgGroup.remove(m.g);
+      m.head.material.dispose();
+      m.tail.material.dispose();
+      meteors.splice(i, 1);
+      continue;
+    }
+    const mvx = m.dir, mvy = -Math.sin(m.ang);
+    m.g.position.x += mvx * m.spd * dt;
+    m.g.position.y += mvy * m.spd * dt;
+    const fade = Math.sin(Math.PI * Math.min(1, t * 1.12));
+    m.head.material.opacity = fade * 0.95;
+    const tl = 5 + m.spd * 0.5;
+    m.tail.scale.set(tl, 0.55, 1);
+    m.tail.material.rotation = Math.atan2(mvy, mvx);
+    m.tail.material.opacity = fade * 0.65;
+    m.tail.position.set(-mvx * tl * 0.42, -mvy * tl * 0.42, 0);
+  }
+}
+
+/* =========================================================
+   5b. 后处理：自研多层辉光 + 胶片颗粒 + 色差 + 暗角
+   ========================================================= */
+const rtScene = new THREE.WebGLRenderTarget(1, 1, { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, depthBuffer: false, stencilBuffer: false });
+const rtA = new THREE.WebGLRenderTarget(1, 1, { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, depthBuffer: false });
+const rtB = new THREE.WebGLRenderTarget(1, 1, { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, depthBuffer: false });
+
+const fsCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+const fsScene = new THREE.Scene();
+const fsMesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), null);
+fsMesh.frustumCulled = false;
+fsScene.add(fsMesh);
+
+const QUAD_VERT = `
+varying vec2 vUv;
+void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }
+`;
+
+const brightMat = new THREE.ShaderMaterial({
+  uniforms: { tSrc: { value: null }, uThresh: { value: 0.42 }, uTexel: { value: new THREE.Vector2() } },
+  vertexShader: QUAD_VERT,
+  fragmentShader: `
+    uniform sampler2D tSrc; uniform float uThresh; uniform vec2 uTexel;
+    varying vec2 vUv;
+    void main(){
+      vec3 s = vec3(0.0);
+      s += texture2D(tSrc, vUv + uTexel * vec2(-1.0, -1.0)).rgb;
+      s += texture2D(tSrc, vUv + uTexel * vec2( 1.0, -1.0)).rgb;
+      s += texture2D(tSrc, vUv + uTexel * vec2(-1.0,  1.0)).rgb;
+      s += texture2D(tSrc, vUv + uTexel * vec2( 1.0,  1.0)).rgb;
+      s *= 0.25;
+      float l = dot(s, vec3(0.299, 0.587, 0.114));
+      float k = max(l - uThresh, 0.0) / max(l, 1e-4);
+      gl_FragColor = vec4(s * k, 1.0);
+    }`,
+  depthTest: false, depthWrite: false,
+});
+
+const blurMat = new THREE.ShaderMaterial({
+  uniforms: { tSrc: { value: null }, uDir: { value: new THREE.Vector2(1, 0) }, uTexel: { value: new THREE.Vector2() } },
+  vertexShader: QUAD_VERT,
+  fragmentShader: `
+    uniform sampler2D tSrc; uniform vec2 uDir; uniform vec2 uTexel;
+    varying vec2 vUv;
+    void main(){
+      vec2 o = uDir * uTexel * 1.7;
+      vec3 c = texture2D(tSrc, vUv).rgb * 0.227;
+      c += (texture2D(tSrc, vUv + o * 1.3846).rgb + texture2D(tSrc, vUv - o * 1.3846).rgb) * 0.3162;
+      c += (texture2D(tSrc, vUv + o * 3.2308).rgb + texture2D(tSrc, vUv - o * 3.2308).rgb) * 0.0702;
+      gl_FragColor = vec4(c, 1.0);
+    }`,
+  depthTest: false, depthWrite: false,
+});
+
+const compMat = new THREE.ShaderMaterial({
+  uniforms: {
+    tScene: { value: null }, tB1: { value: null },
+    uBloom: { value: 1.4 }, uTime: { value: 0 }, uGrain: { value: 0.022 },
+    uCA: { value: 0.0016 }, uVig: { value: 0.85 }, uRes: { value: new THREE.Vector2(1, 1) },
+    uLens: { value: new THREE.Vector3(0.5, 0.5, 0) }, uLensQ: { value: TIER_HI ? 1 : 0 },
+  },
+  vertexShader: QUAD_VERT,
+  fragmentShader: `
+    uniform sampler2D tScene, tB1;
+    uniform float uBloom, uTime, uGrain, uCA, uVig;
+    uniform vec2 uRes;
+    uniform vec3 uLens;
+    uniform float uLensQ;
+    varying vec2 vUv;
+    float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+    /* ACES 电影级色调映射 */
+    vec3 aces(vec3 x){
+      const float a = 2.51, b = 0.03, c = 2.43, d = 0.59, e = 0.14;
+      return clamp((x * (a * x + b)) / (x * (c * x + d) + e), 0.0, 1.0);
+    }
+    void main(){
+      vec2 uv = vUv;
+      /* 引力透镜 + 空间扭曲（黑洞附近屏幕弯折） */
+      if (uLens.z > 0.001) {
+        vec2 lc = uLens.xy;
+        vec2 du = uv - lc;
+        float dr = length(du * vec2(uRes.x / max(uRes.y, 1.0), 1.0));
+        float w = min(uLens.z * 0.115 / (dr + 0.13), 0.38);
+        uv = lc + du * (1.0 - w);
+        if (uLensQ > 0.5) {
+          float sw = uLens.z * 0.16 * exp(-dr * 3.2);
+          float ca = cos(sw), sa = sin(sw);
+          uv = lc + mat2(ca, sa, -sa, ca) * (uv - lc);
+        }
+      }
+      vec2 d = uv - 0.5;
+      float r = texture2D(tScene, uv + d * uCA).r;
+      vec4  g4 = texture2D(tScene, uv);
+      float b = texture2D(tScene, uv - d * uCA).b;
+      vec3 col = vec3(r, g4.g, b);
+      col += texture2D(tB1, uv).rgb * uBloom * 1.35;
+      col = aces(col * 1.18);                     /* ACES 色调映射 */
+      float n = hash(uv * uRes + fract(uTime) * 137.0);
+      col += (n - 0.5) * uGrain;
+      float vig = 1.0 - uVig * dot(d, d) * 1.25;
+      col *= clamp(vig, 0.0, 1.0);
+      gl_FragColor = vec4(col, 1.0);
+    }`,
+  depthTest: false, depthWrite: false,
+});
+
+let bloomEnabled = true;
+let bloomStrength = 1.4;
+
+function blit(mat, target) {
+  fsMesh.material = mat;
+  renderer.setRenderTarget(target);
+  renderer.render(fsScene, fsCam);
+}
+
+function resizePost(w, h) {
+  w = Math.max(2, w | 0); h = Math.max(2, h | 0);
+  rtScene.setSize(w, h);
+  rtA.setSize(Math.max(1, w >> 1), Math.max(1, h >> 1));
+  rtB.setSize(Math.max(1, w >> 1), Math.max(1, h >> 1));
+  compMat.uniforms.uRes.value.set(w, h);
+}
+
+function renderFrame() {
+  compMat.uniforms.uTime.value = state.time;
+  if (!bloomEnabled || compMat.uniforms.uBloom.value <= 0.001) {
+    renderer.setRenderTarget(null);
+    renderer.render(scene, camera);
+    return;
+  }
+  renderer.setRenderTarget(rtScene);
+  renderer.render(scene, camera);
+
+  const hw = rtA.width, hh = rtA.height;
+
+  /* 亮部提取 + 降采样（半分辨率） */
+  brightMat.uniforms.tSrc.value = rtScene.texture;
+  brightMat.uniforms.uThresh.value = 0.46;   // 阈值调高 → 仅亮星发光
+  brightMat.uniforms.uTexel.value.set(1 / rtScene.width, 1 / rtScene.height);
+  blit(brightMat, rtA);
+
+  /* 半分辨率双向模糊 */
+  blurMat.uniforms.uTexel.value.set(1 / hw, 1 / hh);
+  blurMat.uniforms.tSrc.value = rtA.texture;
+  blurMat.uniforms.uDir.value.set(1, 0);
+  blit(blurMat, rtB);
+  blurMat.uniforms.tSrc.value = rtB.texture;
+  blurMat.uniforms.uDir.value.set(0, 1);
+  blit(blurMat, rtA);
+
+  compMat.uniforms.tScene.value = rtScene.texture;
+  compMat.uniforms.tB1.value = rtA.texture;
+  blit(compMat, null);
+}
+
+/* ---- 色调（RGB 色相旋转矩阵） ---- */
+let hueMat = new THREE.Matrix3();
+function setHue(deg) {
+  const a = deg * Math.PI / 180;
+  const c = Math.cos(a), s = Math.sin(a);
+  hueMat.set(
+    0.213 + c * 0.787 - s * 0.213, 0.715 - c * 0.715 - s * 0.715, 0.072 - c * 0.072 + s * 0.928,
+    0.213 - c * 0.213 + s * 0.143, 0.715 + c * 0.285 + s * 0.140, 0.072 - c * 0.072 - s * 0.283,
+    0.213 - c * 0.213 - s * 0.787, 0.715 - c * 0.715 + s * 0.715, 0.072 + c * 0.928 + s * 0.072
+  );
+  if (galaxy) galaxy.shared.uHue.value.copy(hueMat);
+}
+
+/* ---- 开场镜头推进（从远处俯瞰缓缓推入） ---- */
+const CAM_Z = 6.2;
+function updateIntro(dt) {
+  if (dyn.introT >= 1) return;
+  dyn.introT = Math.min(1, dyn.introT + dt / 3.6);
+  const k = 1 - Math.pow(1 - dyn.introT, 3);
+  camera.position.z = 13.5 - 7.3 * k;
+  camera.lookAt(0, 0, 0);
+}
 
 /* =========================================================
    6. 状态 / 视口
@@ -1171,7 +2155,6 @@ const state = {
   showSkeleton: true,
   distK: 0,
   bright: 0.5,
-  bloomValue: 0,
   lastResultTime: -99,
   targetFacing: 'environment',
   mpEverWorked: false,
@@ -1182,8 +2165,10 @@ const state = {
 
 let halfH = 0, halfW = 0, baseScale = 1;
 function updateViewport() {
-  halfH = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.position.z;
-  halfW = halfH * camera.aspect;
+  /* 用固定 CAM_Z 计算「手 → 世界」映射，使开场镜头推进不影响手势坐标 */
+  const hh = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * CAM_Z;
+  halfH = hh;
+  halfW = hh * camera.aspect;
   baseScale = clamp(halfH / 4.4, 0.4, 1.0);
 }
 updateViewport();
@@ -1446,7 +2431,9 @@ function startFrameLoop() {
     }
 
     if (!videoEl.videoWidth || videoEl.readyState < 2) return;
-    if (now - lastSendAt < 0.033) return;   // 发送限速 ~30Hz，减轻 GPU / 主线程争用
+    /* CPU/GPU 并行：渲染帧率低时自动降低推理频率，避免 CPU 推理与 GPU 渲染互相饿死 */
+    const mpGap = (state.fpsNow || 60) < 22 ? 0.05 : 0.033;
+    if (now - lastSendAt < mpGap) return;
 
     frameBusy = true;
     sendStartedAt = now;
@@ -1496,6 +2483,26 @@ function onResults(results) {
     /* MediaPipe 假设输入为镜像画面；我们喂的是原始画面 → 左右标签互换 */
     const rawL = handedness[n] && handedness[n].label ? handedness[n].label.toLowerCase() : '';
     info.handed = rawL === 'left' ? 'right' : (rawL === 'right' ? 'left' : '');
+
+    /* 手部坐标平滑（指数滤波）+ 深度估计（手掌尺寸近似深度） */
+    state.handSm = state.handSm || {};
+    const key = info.handed || ('i' + n);
+    let sm = state.handSm[key];
+    if (!sm) {
+      sm = state.handSm[key] = { px: info.palm.x, py: info.palm.y, tx: info.tip.x, ty: info.tip.y, sc: info.scale, rw: info.raw, pn: info.pinch == null ? 0.8 : info.pinch, rl: info.roll };
+    }
+    const sk = 0.38;
+    sm.px += (info.palm.x - sm.px) * sk; sm.py += (info.palm.y - sm.py) * sk;
+    sm.tx += (info.tip.x - sm.tx) * sk;   sm.ty += (info.tip.y - sm.ty) * sk;
+    sm.sc += (info.scale - sm.sc) * sk;
+    sm.rw += (info.raw - sm.rw) * sk;
+    sm.rl += (info.roll - sm.rl) * sk;
+    if (info.pinch != null) sm.pn += (info.pinch - sm.pn) * sk;
+    info.palm.x = sm.px; info.palm.y = sm.py;
+    info.tip = { x: sm.tx, y: sm.ty };
+    info.scale = sm.sc; info.raw = sm.rw; info.roll = sm.rl;
+    if (info.pinch != null) info.pinch = sm.pn;
+    info.depth = clamp((sm.sc - 0.09) * 5, -1, 1);   /* 手掌越大 → 越近 */
     state.hands.push(info);
   }
 }
@@ -1702,6 +2709,7 @@ function buildGalaxy(count) {
     galaxy = null;
   }
   galaxy = new Galaxy(count);
+  setHue(Number($('s-hue').value));
   galaxy.group.visible = false;
   scene.add(galaxy.group);
 }
@@ -1715,18 +2723,25 @@ const dyn = {
   scale: 1, targetScale: 1, roll: 0,
   handVel: new THREE.Vector3(), handStr: 0, targetHandStr: 0,   // 右手扰动：速度 + 强度
   leftPos: new THREE.Vector3(), leftVel: new THREE.Vector3(), leftStr: 0, targetLeftStr: 0, leftSeen: false,   // 左手拨动场
-  pinch: 0.5, spinVel: 0, spinAngle: 0, spinOffset: 0, ripT: new THREE.Vector2(-99, -99), ripSlot: 0, ripAmp: 0, ripCool: -99, ripLast: -99,   // 捏合缩放 / 拨动角动量 / 旋转朝向
+  pinch: 0.5, spinVel: 0, spinAngle: 0, spinOffset: 0,   // 捏合缩放 / 拨动角动量 / 旋转朝向
+  shockPos: new THREE.Vector3(), shockT: -99, shockStr: 0,     // 点击冲击波
+  viewZoom: 1, targetViewZoom: 1, dragSpin: 0,                // 滚轮缩放 / 拖拽旋转
+  parallax: { x: 0, y: 0 },                                   // 鼠标视差
+  introT: 0,                                                  // 开场镜头推进进度
   justAppeared: true,
+  bh: { state: 'galaxy', t: 0, k: 0, cool: 0, fistT: 0, openT: 0 },   // 黑洞形态状态机
+  leftOpen: 0.5, flip: 0, targetFlip: 0,                             // 左手张握 → 三维翻转
 };
 
 /* =========================================================
    12. 每帧更新
    ========================================================= */
-const BASE_SIZE = 10;
+const BASE_SIZE = 5.5;
 const _tmp = new THREE.Vector3();
 const _prevPos = new THREE.Vector3();   // 上一帧银河中心（扰动速度计算）
 const _velRaw = new THREE.Vector3();
 const _prevLeft = new THREE.Vector3();  // 上一帧左手掌心（拨动速度计算）
+const _lensProj = new THREE.Vector3();  // 黑洞屏幕投影（引力透镜用）
 
 function update(dt, now) {
   let hs = state.hands;
@@ -1759,10 +2774,11 @@ function update(dt, now) {
     rot = hs.find(h => h.handed === 'left' && h !== ctrl) || hs.find(h => h !== ctrl) || null;
   }
 
+
   /* ---- 左手：旋转（手掌转角）+ 拨动（甩动 → 角动量 + 搅动场） ---- */
   if (rot) {
     videoToWorld(rot.palm.x, rot.palm.y, _tmp);
-    _tmp.z = 0.35;
+    _tmp.z = 0.35 + clamp((rot.scale - 0.09) * 5, -1, 1) * 0.6;   /* 深度估计：手掌尺寸近似深度 */
     if (!dyn.leftSeen) { dyn.leftPos.copy(_tmp); _prevLeft.copy(_tmp); }   // 首帧吸附，防速度尖峰
     dyn.leftPos.lerp(_tmp, 1 - Math.exp(-14 * dt));
     _velRaw.set(
@@ -1774,37 +2790,25 @@ function update(dt, now) {
     dyn.leftVel.lerp(_velRaw, 1 - Math.exp(-8 * dt));
     if (dyn.leftVel.length() > 1.8) dyn.leftVel.setLength(1.8);
 
-    dyn.spinVel += dyn.leftVel.x * 3.6 * dt;   // 拨动：横向甩动注入角动量
-    dyn.spinOffset = dampAngle(dyn.spinOffset, clamp(-rot.roll, -1.25, 1.25), 3.5, dt);   // 旋转：跟随手掌转角
-    dyn.targetLeftStr = 0.22 + 0.80 * clamp(dyn.leftVel.length() / 1.8);
+    /* ---- 左手张握 → 银河三维翻转（张开 +，握拳 −，幅度面板可调） ---- */
+    const amp = ((Number($('s-flip').value) || 90) * Math.PI) / 180;
+    const lo = smoothstep(0.18, 0.85, rot.raw);
+    dyn.leftOpen += (lo - dyn.leftOpen) * (1 - Math.exp(-9 * dt));
+    dyn.targetFlip = (dyn.leftOpen - 0.5) * 2 * amp;
+    dyn.targetLeftStr = 0;
     dyn.leftSeen = true;
-
-    /* 左手拨动 → 触发水波纹（双槽交替） */
-    const lspd2 = dyn.leftVel.length();
-    if (lspd2 > 0.7 && now - dyn.ripCool > 0.45) {
-      dyn.ripCool = now;
-      dyn.ripT.setComponent(dyn.ripSlot, now);
-      dyn.ripSlot ^= 1;
-      dyn.ripAmp = clamp(0.55 + lspd2 * 0.45, 0.55, 1.3);
-    }
   } else {
     dyn.leftSeen = false;
+    dyn.targetFlip = 0;   /* 手离开 → 缓缓回正 */
     dyn.targetLeftStr = 0;
     dyn.leftVel.multiplyScalar(Math.exp(-5 * dt));
   }
   dyn.leftStr = damp(dyn.leftStr, dyn.targetLeftStr, 4, dt);
+  dyn.spinOffset = dampAngle(dyn.spinOffset, 0, 1.8, dt);   /* 旧旋转手势已移除 → 缓缓回正 */
   dyn.spinVel = damp(dyn.spinVel, 0, 1.05, dt);   // 角动量自然衰减
   dyn.spinVel = clamp(dyn.spinVel, -7, 7);
   dyn.spinAngle += dyn.spinVel * dt;
   if (Math.abs(dyn.spinAngle) > 628) dyn.spinAngle %= TAU;
-
-  /* 环境波纹：定期泛出柔和波纹 */
-  if (now - dyn.ripLast > 5.0 && now - dyn.ripT.x > 1.5 && now - dyn.ripT.y > 1.5) {
-    dyn.ripLast = now;
-    dyn.ripT.setComponent(dyn.ripSlot, now);
-    dyn.ripSlot ^= 1;
-    dyn.ripAmp = 0.35;
-  }
 
   if (ctrl) {
     videoToWorld(ctrl.palm.x, ctrl.palm.y, dyn.target);
@@ -1873,11 +2877,44 @@ function update(dt, now) {
     }
   }
 
+  /* ---- 黑洞形态状态机：握拳 0.4s → 2s 坍缩 → 黑洞；张掌 0.4s → 2s 绽放回归 ---- */
+  {
+    const bh = dyn.bh;
+    bh.cool = Math.max(0, bh.cool - dt);
+    const bhOn = $('s-bh') ? $('s-bh').checked : true;
+    if (!bhOn) {
+      if (bh.state !== 'galaxy') { bh.state = 'galaxy'; bh.t = 0; bh.k = 0; bh.fistT = 0; bh.openT = 0; }
+    } else if (dyn.seen) {
+      const ctrlReal = !!ctrl && !state.skinMode;   /* 仅真实 MediaPipe 手可触发黑洞（皮肤兜底不触发） */
+      const fistNow = ctrlReal && dyn.rawOpen < 0.22;
+      const openNow = ctrlReal && dyn.rawOpen > 0.72;
+      if (bh.state === 'galaxy') {
+        bh.fistT = fistNow ? bh.fistT + dt : 0;
+        if (bh.fistT >= 0.4 && bh.cool <= 0) {
+          bh.state = 'collapsing'; bh.t = 0; bh.fistT = 0;   /* 持续握拳 0.4s → 进入坍缩 */
+        }
+      } else if (bh.state === 'collapsing') {
+        bh.t = Math.min(1, bh.t + dt / 2.0);                 /* 2s 坍缩为黑洞 */
+        bh.k = smoothstep(0, 1, bh.t);
+        if (bh.t >= 1) { bh.state = 'blackhole'; bh.cool = 0.9; }
+      } else if (bh.state === 'blackhole') {
+        bh.openT = openNow ? bh.openT + dt : 0;
+        if (bh.openT >= 0.4 && bh.cool <= 0) { bh.state = 'blooming'; bh.t = 0; bh.openT = 0; }
+      } else if (bh.state === 'blooming') {
+        bh.t = Math.min(1, bh.t + dt / 2.0);                 /* 2s 绽放回归银河 */
+        bh.k = 1 - smoothstep(0, 1, bh.t);
+        if (bh.t >= 1) { bh.state = 'galaxy'; bh.k = 0; bh.cool = 0.9; }
+      }
+    }
+    if (!isFinite(bh.k)) { bh.k = 0; bh.state = 'galaxy'; }
+  }
+
   /* ---- 阻尼 ---- */
   dyn.bloom = damp(dyn.bloom, dyn.targetBloom, 8, dt);
   dyn.scale = damp(dyn.scale, dyn.targetScale, 6, dt);
   dyn.focusStrength = damp(dyn.focusStrength, dyn.targetFocusStrength, 6, dt);
   dyn.opacity = damp(dyn.opacity, dyn.seen ? 1 : 0, dyn.seen ? 8 : 3, dt);
+  dyn.flip = damp(dyn.flip, dyn.targetFlip, 3.2, dt);
 
   if (dyn.justAppeared) {
     dyn.pos.copy(dyn.target);
@@ -1917,21 +2954,28 @@ function update(dt, now) {
   if (!isFinite(dyn.handVel.x + dyn.handVel.y)) dyn.handVel.set(0, 0, 0);
   if (!isFinite(dyn.leftVel.x + dyn.leftVel.y)) dyn.leftVel.set(0, 0, 0);
 
+  /* ---- 冲击波衰减 / 鼠标视差 / 滚轮视距 ---- */
+  dyn.shockStr = damp(dyn.shockStr, 0, 2.2, dt);
+  dyn.parallax.x = (state.pointer.x - 0.5) * 2;
+  dyn.parallax.y = (0.5 - state.pointer.y) * 2;
+  dyn.viewZoom = damp(dyn.viewZoom, dyn.targetViewZoom, 5, dt);
+
   if (galaxy) {
     const g = galaxy.group;
     g.position.copy(dyn.pos);
-    g.scale.setScalar(dyn.scale);
+    g.scale.setScalar(dyn.scale * dyn.viewZoom);
 
     /* 3D 倾角 + 缓慢摆动 */
     const tiltRad = (Number($('s-tilt').value) * Math.PI) / 180;
-    g.rotation.x = damp(g.rotation.x, tiltRad + 0.05 * Math.sin(now * 0.16), 1.6, dt);
+    g.rotation.x = damp(g.rotation.x, tiltRad + 0.05 * Math.sin(now * 0.16) + dyn.flip, 1.6, dt);
     g.rotation.z = dyn.spinOffset + dyn.spinAngle;   // 左手旋转 / 拨动
     g.visible = dyn.opacity > 0.008;
 
-    const u = galaxy.uniforms;
+    const u = galaxy.shared;
     u.uTime.value = now;
     u.uBloom.value = dyn.bloom;
-    u.uOpacity.value = dyn.opacity;
+    u.uBH.value = dyn.bh.k;                                   /* 黑洞坍缩因子 */
+    u.uOpacity.value = dyn.opacity * (1 - 0.88 * smoothstep(0.30, 1.0, dyn.bh.k));   /* 银河淡出（后段加速） */
     u.uFocus.value.copy(dyn.focus);
     u.uFocusStrength.value = dyn.focusStrength * (0.35 + 0.65 * dyn.bloom);
     u.uFocusRadius.value = 1.5;
@@ -1941,26 +2985,77 @@ function update(dt, now) {
     u.uHand2.value.copy(dyn.leftPos);
     u.uHand2Vel.value.copy(dyn.leftVel);
     u.uHand2Str.value = dyn.leftStr;
-    u.uRipples.value.copy(dyn.ripT);
-    u.uRippleAmp.value = dyn.ripAmp;
+    u.uShock.value.copy(dyn.shockPos);
+    u.uShockT.value = dyn.shockT;
+    u.uShockStr.value = dyn.shockStr;
     u.uSize.value = BASE_SIZE * Number($('s-size').value);
     u.uPixelRatio.value = DPR;
     u.uSpin.value = Number($('s-spin').value);
+    u.uArms.value = NARMS;
+    u.uGalR.value = GALAXY_R;
 
+    /* ---- 黑洞视觉：吸积盘（近/远半）/ 环绕光带 / 喷流 / 事件视界 ---- */
+    const fx = galaxy.bhFx;
+    if (fx) {
+      const bk = dyn.bh.k;
+      const vis = bk > 0.015 && dyn.opacity > 0.01;
+      fx.diskFar.visible = fx.diskNear.visible = fx.band.visible = fx.jet.visible = fx.shadow.visible = vis;
+      if (vis) {
+        const kD = smoothstep(0.28, 0.92, bk);   /* 吸积盘 + 光带（中段浮现） */
+        const kS = smoothstep(0.10, 0.82, bk);   /* 视界阴影（早段生长） */
+        const kJ = smoothstep(0.55, 1.00, bk);   /* 喷流（最后出现） */
+        const op = dyn.opacity;
+        const spinZ = dyn.spinOffset + dyn.spinAngle;
+        fx.diskFarMat.uniforms.uOpacity.value = op * kD;
+        fx.diskNearMat.uniforms.uOpacity.value = op * kD;
+        fx.bandMat.uniforms.uOpacity.value = op * kD;
+        fx.jetMat.uniforms.uOpacity.value = op * kJ * 0.9;
+        fx.shadowMat.uniforms.uOpacity.value = op * kS * 0.97;
+        fx.diskFarMat.uniforms.uTime.value = now;
+        fx.diskNearMat.uniforms.uTime.value = now;
+        fx.bandMat.uniforms.uTime.value = now;
+        fx.jetMat.uniforms.uTime.value = now;
+        fx.diskFarMat.uniforms.uPixelRatio.value = DPR;
+        fx.diskNearMat.uniforms.uPixelRatio.value = DPR;
+        fx.bandMat.uniforms.uPixelRatio.value = DPR;
+        fx.jetMat.uniforms.uPixelRatio.value = DPR;
+        fx.diskFarMat.uniforms.uSpinZ.value = spinZ;
+        fx.diskNearMat.uniforms.uSpinZ.value = spinZ;
+        const rsD = 0.18 + 0.82 * kD;
+        fx.diskFar.scale.setScalar(rsD);
+        fx.diskNear.scale.setScalar(rsD);
+        fx.band.scale.setScalar(rsD);
+        fx.jet.scale.setScalar(0.15 + 0.85 * kJ);
+        fx.shadow.scale.setScalar((0.10 + 0.90 * kS) * 1.78);
+        fx.band.rotation.z = -spinZ;               /* 抵消银河自旋 → 光带始终环绕黑洞 */
+        fx.shadow.lookAt(camera.position);
+      }
+    }
+
+    /* ---- 引力透镜：黑洞屏幕投影 → 后处理空间扭曲 ---- */
+    _lensProj.copy(dyn.pos).project(camera);
+    compMat.uniforms.uLens.value.set(_lensProj.x * 0.5 + 0.5, _lensProj.y * 0.5 + 0.5, dyn.bh.k * 0.9);
+
+    /* 星云雾气：缓慢流动 + 呼吸（黑洞态淡出） */
+    const bhFade = 1 - 0.82 * smoothstep(0.30, 1.0, dyn.bh.k);
     for (const sp of galaxy.sprites) {
       const ud = sp.userData;
       sp.material.rotation = ud.rot + now * (0.02 + ud.phase * 0.012);
-      const pulse = 1 + 0.07 * Math.sin(now * 0.6 + ud.phase * 3);
+      const pulse = 1 + 0.09 * Math.sin(now * 0.5 + ud.phase * 3);
       sp.scale.set(ud.base * pulse, ud.base * pulse, 1);
-      sp.material.opacity = ud.op * (0.15 + 0.85 * dyn.bloom);
+      sp.material.opacity = ud.op * (0.10 + 0.90 * dyn.bloom) * dyn.opacity * bhFade;
     }
 
+    /* 银核三层辉光脉动（黑洞态收缩淡出） */
     const corePulse = 0.9 + 0.1 * Math.sin(now * 1.4);
-    galaxy.coreGlow.material.opacity = (0.30 + 0.70 * dyn.bloom) * corePulse;
-    galaxy.coreGlow.scale.setScalar((1.8 + 0.3 * dyn.bloom) * corePulse);
+    galaxy.coreGlow.material.opacity = (0.42 + 0.58 * dyn.bloom) * corePulse * dyn.opacity * bhFade;
+    galaxy.coreGlow.scale.setScalar((2.4 + 0.5 * dyn.bloom) * corePulse * (1 - 0.5 * dyn.bh.k));
+    galaxy.coreGlow2.material.opacity = (0.26 + 0.44 * dyn.bloom) * corePulse * dyn.opacity * bhFade;
+    galaxy.coreGlow2.scale.setScalar((5.0 + 1.0 * dyn.bloom) * (1 - 0.5 * dyn.bh.k));
+    galaxy.coreHalo.material.opacity = (0.13 + 0.20 * dyn.bloom) * dyn.opacity * bhFade;
+    galaxy.coreHalo.scale.setScalar((8.6 + 2.0 * dyn.bloom) * (1 - 0.55 * dyn.bh.k));
   }
 
-  state.bloomValue = dyn.bloom;
 }
 
 /* =========================================================
@@ -1968,6 +3063,7 @@ function update(dt, now) {
    ========================================================= */
 const clock = new THREE.Clock();
 let fpsAcc = 0, fpsFrames = 0, hudTimer = 0;
+let lowStreak = 0, autoDegrade = 0;   // 性能自适应状态
 
 function animate() {
   requestAnimationFrame(animate);
@@ -1977,22 +3073,13 @@ function animate() {
   state.time += dt;
   const now = state.time;
 
+  updateIntro(dt);
   update(dt, now);
 
-  if (bgFlowMat) bgFlowMat.uniforms.uTime.value = now;
+  updateBackground(now, dt);
+  updateMeteors(now, dt);
 
-  /* 背景星云漂移 + 远星系自转 */
-  for (const sp of bgClouds) {
-    sp.position.x += sp.userData.drift.x * dt;
-    sp.position.y += sp.userData.drift.y * dt;
-    const pulse = 1 + 0.08 * Math.sin(now * 0.4 + sp.userData.phase);
-    sp.scale.setScalar(sp.userData.base * pulse);
-  }
-  for (const sp of bgGalaxies) {
-    sp.material.rotation = sp.userData.rot + now * 0.02;
-  }
-
-  renderer.render(scene, camera);
+  renderFrame();
 
   drawSkeleton();
   drawFocusMarker();
@@ -2001,22 +3088,32 @@ function animate() {
   if (hudTimer > 0.3) {
     hudTimer = 0;
     const fps = fpsFrames / Math.max(fpsAcc, 1e-4);
+    state.fpsNow = fps;
     fpsAcc = 0; fpsFrames = 0;
+
+    /* ---- 性能自适应：帧率过低 → 先关辉光，再降粒子 ---- */
+    if (now < 10) lowStreak = 0;   /* 启动宽限：初始化抖动不计入降级 */
+    else if (fps < 15) lowStreak++; else lowStreak = 0;
+    if (lowStreak >= 8 && autoDegrade < 3) {
+      lowStreak = 0;
+      /* 只降粒子量：辉光与分辨率保持不变 → 雾状光带亮度始终保留 */
+      if (galaxy && galaxy.count > 60000) {
+        autoDegrade++;
+        buildGalaxy(Math.max(60000, Math.round(galaxy.count * 0.75)));
+      }
+    }
 
     const n = galaxy ? galaxy.count : 0;
     $('stats').textContent =
-      `${fps.toFixed(0)} fps · ${state.hands.length} hand · ${(n / 1000).toFixed(0)}k pts`;
+      `${fps.toFixed(0)} fps · ${(n / 1000).toFixed(0)}k pts · 辉光${bloomEnabled ? '开' : '关'}${autoDegrade ? ' · 自适应降级' : ''}`;
 
-    const pct = Math.round(state.bloomValue * 100);
-    $('bloom-bar').style.width = pct + '%';
-    $('bloom-val').textContent = pct + '%';
 
     /* ---- 手部检测看门狗：无结果 → 切换模型源 / 给出指引 ---- */
     if (state.cameraReady) {
       const noHandFor = now - state.lastResultTime;
       if (state.hands.length > 0) {
         if ($('hint').textContent.indexOf('握拳') < 0) {
-          $('hint').textContent = '右手移动/捏合缩放 · 左手旋转/拨动 · 握拳坍缩 · 张掌绽放';
+          $('hint').textContent = '右手移动/捏合缩放 · 左手张握翻转 · 握拳成黑洞 · 张掌回银河';
         }
       } else if (noHandFor > 10 && !frameBusy) {
         /* 不打断正在加载/推理中的实例（避免 MediaPipe 内部竞态崩溃） */
@@ -2043,7 +3140,7 @@ function animate() {
         ? '(' + state.hands.map(h => h.handed === 'left' ? '左' : h.handed === 'right' ? '右' : '?').join('') + ')'
         : '';
       $('diag').textContent =
-        `MP:${mpState} · CAM:${state.cameraReady ? (state.facingMode === 'environment' ? '后置' : '前置') : '未开'} · 手:${state.hands.length}${handTag} · 源:${mpBaseIdx + 1}/${MP_BASES.length}${state.skinMode ? ' · 皮肤兜底' : ''}`;
+        `MP:${mpState} · CAM:${state.cameraReady ? (state.facingMode === 'environment' ? '后置' : '前置') : '未开'} · 手:${state.hands.length}${handTag} · 源:${mpBaseIdx + 1}/${MP_BASES.length}${state.skinMode ? ' · 皮肤兜底' : ''} · 臂:${NARMS}`;
     }
   }
 }
@@ -2082,6 +3179,35 @@ addEventListener('pointerup', () => {
 
 addEventListener('pointercancel', () => { state.pointer.down = false; }, { passive: true });
 
+/* ---- 点击 → 冲击波（粒子被推开后弹性回归） ---- */
+addEventListener('pointerdown', (e) => {
+  if (e.target.closest('.fab, .panel, .cam-retry, .cam-flip')) return;
+  const p = ptr(e);
+  screenToWorld(p.x * innerWidth, p.y * innerHeight, dyn.shockPos);
+  dyn.shockPos.z = 0.2;
+  dyn.shockT = state.time;
+  dyn.shockStr = 1.0;
+}, { passive: true });
+
+/* ---- 滚轮缩放 ---- */
+addEventListener('wheel', (e) => {
+  dyn.targetViewZoom = clamp(dyn.targetViewZoom * (1 - e.deltaY * 0.0012), 0.45, 2.4);
+}, { passive: true });
+
+/* ---- 拖拽旋转 ---- */
+let _dragX = null;
+addEventListener('pointerdown', (e) => {
+  if (e.target.closest('.fab, .panel, .cam-retry, .cam-flip')) return;
+  _dragX = e.clientX;
+}, { passive: true });
+addEventListener('pointermove', (e) => {
+  if (_dragX === null) return;
+  const dx = e.clientX - _dragX;
+  _dragX = e.clientX;
+  dyn.spinVel = clamp(dyn.spinVel + dx * 0.010, -7, 7);
+}, { passive: true });
+addEventListener('pointerup', () => { _dragX = null; }, { passive: true });
+
 /* =========================================================
    15. 控制面板
    ========================================================= */
@@ -2097,6 +3223,7 @@ $('s-count').addEventListener('input', (e) => {
 });
 $('s-count').addEventListener('change', (e) => {
   const n = Number(e.target.value);
+  autoDegrade = 0; lowStreak = 0;   // 手动调整后重置自适应
   $('loading').style.display = '';
   $('loading').classList.remove('done');
   setTimeout(() => {
@@ -2105,6 +3232,62 @@ $('s-count').addEventListener('change', (e) => {
     setTimeout(() => { $('loading').style.display = 'none'; }, 500);
   }, 30);
 });
+
+$('s-arms').addEventListener('input', (e) => {
+  NARMS = Number(e.target.value);
+  $('v-arms').textContent = String(NARMS);
+  buildClusters();
+});
+$('s-arms').addEventListener('change', () => {
+  $('loading').style.display = '';
+  $('loading').classList.remove('done');
+  setTimeout(() => {
+    buildGalaxy(galaxy ? galaxy.count : DEFAULT_COUNT);
+    $('loading').classList.add('done');
+    setTimeout(() => { $('loading').style.display = 'none'; }, 500);
+  }, 30);
+});
+
+$('s-hue').addEventListener('input', (e) => {
+  const deg = Number(e.target.value);
+  $('v-hue').textContent = deg + '°';
+  setHue(deg);
+});
+
+$('s-bloomstr').addEventListener('input', (e) => {
+  const v = Number(e.target.value);
+  $('v-bloomstr').textContent = v.toFixed(2);
+  bloomStrength = v;
+  compMat.uniforms.uBloom.value = v;
+  bloomEnabled = v > 0.001;
+  if (v > 0.001) autoDegrade = 0;
+});
+
+function rebuildGalaxy() {
+  $('loading').style.display = '';
+  $('loading').classList.remove('done');
+  setTimeout(() => {
+    buildGalaxy(galaxy ? galaxy.count : DEFAULT_COUNT);
+    $('loading').classList.add('done');
+    setTimeout(() => { $('loading').style.display = 'none'; }, 500);
+  }, 30);
+}
+
+$('s-fanr').addEventListener('input', (e) => {
+  FAN_CFG.radius = Number(e.target.value);
+  $('v-fanr').textContent = FAN_CFG.radius.toFixed(2);
+});
+$('s-fana').addEventListener('input', (e) => {
+  FAN_CFG.angle = Number(e.target.value);
+  $('v-fana').textContent = FAN_CFG.angle + '°';
+});
+$('s-fanl').addEventListener('input', (e) => {
+  FAN_CFG.layers = Number(e.target.value);
+  $('v-fanl').textContent = String(FAN_CFG.layers);
+});
+for (const id of ['s-fanr', 's-fana', 's-fanl']) {
+  $(id).addEventListener('change', () => rebuildGalaxy());
+}
 
 $('s-size').addEventListener('input', (e) => {
   $('v-size').textContent = Number(e.target.value).toFixed(2);
@@ -2115,6 +3298,9 @@ $('s-sens').addEventListener('input', (e) => {
   $('v-sens').textContent = state.sensitivity.toFixed(2);
 });
 
+$('s-flip').addEventListener('input', (e) => {
+  $('v-flip').textContent = Number(e.target.value) + '°';
+});
 $('s-spin').addEventListener('input', (e) => {
   $('v-spin').textContent = Number(e.target.value).toFixed(2);
 });
@@ -2150,7 +3336,7 @@ $('btn-cam').addEventListener('click', async () => {
     await startTracking();
     const name = state.facingMode === 'environment' ? '后置摄像头' : '前置摄像头';
     setStatus(`已就绪 · ${name} · 银河跟随手掌`, 'ok');
-    $('hint').textContent = '右手移动/捏合缩放 · 左手旋转/拨动 · 握拳坍缩 · 张掌绽放';
+    $('hint').textContent = '右手移动/捏合缩放 · 左手张握翻转 · 握拳成黑洞 · 张掌回银河';
   } catch (err) {
     console.warn('[tracking]', err);
     setStatus(err && err.message ? err.message : '摄像头启动失败', 'err');
@@ -2185,6 +3371,8 @@ function onResize() {
   camera.updateProjectionMatrix();
   updateViewport();
   renderer.setSize(w, h, false);
+  const dbs = renderer.getDrawingBufferSize(new THREE.Vector2());
+  resizePost(dbs.x, dbs.y);
   resizeOverlay();
 }
 addEventListener('resize', onResize);
@@ -2223,23 +3411,36 @@ window.__DBG = () => {
     opacity: +dyn.opacity.toFixed(3), scale: +dyn.scale.toFixed(3), bloom: +dyn.bloom.toFixed(3),
     seen: dyn.seen,
     pos: [+dyn.pos.x.toFixed(2), +dyn.pos.y.toFixed(2), +dyn.pos.z.toFixed(2)],
-    rotZ: +(dyn.spinOffset + dyn.spinAngle).toFixed(2), rip: [+dyn.ripT.x.toFixed(1), +dyn.ripT.y.toFixed(1), +dyn.ripAmp.toFixed(2)],
+    rotZ: +(dyn.spinOffset + dyn.spinAngle).toFixed(2),
     handStr: +dyn.handStr.toFixed(2), leftStr: +dyn.leftStr.toFixed(2),
     shaderErr: window.__SHADER_ERR || null,
+    bloom: bloomEnabled, bloomStr: +compMat.uniforms.uBloom.value.toFixed(2),
+    arms: NARMS, layers: galaxy ? galaxy.layers.map(L => L.count) : null,
+    autoDegrade,
+    bh: dyn.bh.state, bhK: +dyn.bh.k.toFixed(3), flip: +dyn.flip.toFixed(2), leftOpen: +dyn.leftOpen.toFixed(2),
     mp: { everWorked: state.mpEverWorked, base: mpBaseIdx + 1, busy: frameBusy, hands: state.hands.length, skin: state.skinMode },
   };
+};
+
+/* ---- 调试：强制黑洞坍缩系数（自动化验证用） ---- */
+window.__BHSET = (k) => {
+  dyn.bh.k = clamp(Number(k) || 0);
+  dyn.bh.state = dyn.bh.k > 0.5 ? 'blackhole' : 'galaxy';
+  dyn.bh.t = 0;
 };
 
 (function boot() {
   $('loading').classList.remove('done');
   /* 启动时覆盖提示文案（兜底 HTML 初始文本） */
-  $('hint').textContent = '右手移动/捏合缩放 · 左手旋转/拨动 · 握拳坍缩 · 张掌绽放';
+  $('hint').textContent = '右手移动/捏合缩放 · 左手张握翻转 · 握拳成黑洞 · 张掌回银河';
 
   if (!SUPPORTS_SCREEN) {
     videoEl.style.display = 'none';
   }
 
   setTimeout(() => {
+    const _dbs = renderer.getDrawingBufferSize(new THREE.Vector2());
+    resizePost(_dbs.x, _dbs.y);
     buildGalaxy(DEFAULT_COUNT);
     $('loading').classList.add('done');
     setTimeout(() => { $('loading').style.display = 'none'; }, 600);
@@ -2251,7 +3452,7 @@ window.__DBG = () => {
       .then(() => {
         const name = state.facingMode === 'environment' ? '后置摄像头' : '前置摄像头';
         setStatus(`已就绪 · ${name} · 银河跟随手掌`, 'ok');
-        $('hint').textContent = '右手移动/捏合缩放 · 左手旋转/拨动 · 握拳坍缩 · 张掌绽放';
+        $('hint').textContent = '右手移动/捏合缩放 · 左手张握翻转 · 握拳成黑洞 · 张掌回银河';
       })
       .catch((err) => {
         console.warn('[tracking] 初始化失败：', err);
